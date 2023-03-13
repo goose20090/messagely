@@ -3,10 +3,16 @@ import { useState } from "react";
 
 function LoginDraft({onLogin, setLoading}){
 
-    const [username, setUsername] = useState('')
+    const [formData, setFormData] = useState({
+        username: "",
+        password: ""
+    })
 
     function handleChange(e){
-        setUsername(e.target.value)
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
     }
 
     function handleSubmit(e){
@@ -18,7 +24,7 @@ function LoginDraft({onLogin, setLoading}){
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({username})
+            body: JSON.stringify(formData)
         })
         .then((r)=> r.json())
         .then((user)=> onLogin(user))
@@ -26,7 +32,9 @@ function LoginDraft({onLogin, setLoading}){
     return(
         <form onSubmit={handleSubmit}>
             <label>Username: </label>
-            <input name = "username" type={"text"} onChange = {handleChange} value = {username}/>
+            <input name = "username" type={"text"} onChange = {handleChange} value = {formData.username}/>
+            <label>Password: </label>
+            <input name = "password" type={"text"} onChange = {handleChange} value = {formData.password}/>
             <input type={"submit"}/>
         </form>
     )

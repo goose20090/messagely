@@ -2,6 +2,8 @@ import React from "react";
 
 function DraftLoginScreen({user, onLogout, setLoading}){
 
+
+    console.log(user)
     function handleLogout(){
         setLoading(true);
         onLogout();
