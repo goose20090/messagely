@@ -1,19 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import './App.css';
 import DraftLoginScreen from './components/DraftLoginScreen';
 import LoginDraft from './components/LoginDraft';
-import ClimbingBoxLoader from 'react-spinners/ClipLoader'
+import BeatLoader from 'react-spinners/BeatLoader'
+import { UserContext } from './context/user';
 
 function App() {
 
-  const [loggedInUser, setLoggedInUser] = useState(false)
+  const {user, setUser} = useContext(UserContext)
   const [loading, setLoading] = useState(true)
 
   useEffect(()=> {
     fetch("/me").then((r)=>{
       if (r.ok){
         r.json().then((user)=> {
-          setLoggedInUser(user);
+          setUser(user);
           setLoading(false);
         })
       }
@@ -22,12 +23,13 @@ function App() {
   }, []);
 
   function onLogin(user){
-    setLoggedInUser(user)
+    setUser(user)
+    console.log("login successful")
     setLoading(false)
   }
 
   function onLogout(){
-    setLoggedInUser(false)
+    setUser(false)
     fetch("/logout", {
       method: "DELETE",
     }).then(()=> {
@@ -40,10 +42,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         {loading?
-        <ClimbingBoxLoader color= {"rgb(54, 215,183"}/>
+        <BeatLoader color= {"rgb(54, 215,183"}/>
         :
-        loggedInUser? 
-        <DraftLoginScreen user = {loggedInUser} onLogout = {onLogout} setLoading = {setLoading}/>
+        user? 
+        <DraftLoginScreen user = {user} onLogout = {onLogout} setLoading = {setLoading}/>
         : 
         <LoginDraft onLogin={onLogin} setLoading = {setLoading}/>}
       </header>
