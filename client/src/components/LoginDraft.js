@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react";
 
-function LoginDraft({onLogin}){
+function LoginDraft({onLogin, setLoading}){
 
     const [username, setUsername] = useState('')
 
@@ -11,6 +11,7 @@ function LoginDraft({onLogin}){
 
     function handleSubmit(e){
         e.preventDefault()
+        setLoading(true)
 
         fetch("/login",{
             method: "POST",
