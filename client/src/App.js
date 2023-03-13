@@ -4,6 +4,8 @@ import DraftLoginScreen from './components/DraftLoginScreen';
 import LoginDraft from './components/LoginDraft';
 import BeatLoader from 'react-spinners/BeatLoader'
 import { UserContext } from './context/user';
+import { Link, Route, Switch } from 'react-router-dom';
+import DraftSignup from './components/DraftSignup';
 
 function App() {
 
@@ -41,13 +43,24 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {loading?
-        <BeatLoader color= {"rgb(54, 215,183"}/>
-        :
-        user? 
-        <DraftLoginScreen user = {user} onLogout = {onLogout} setLoading = {setLoading}/>
-        : 
-        <LoginDraft onLogin={onLogin} setLoading = {setLoading}/>}
+        <Switch>
+          <Route path = "/signup">
+            <DraftSignup onLogin = {onLogin}/>
+          </Route>
+          <Route path = "/">
+            {loading?
+            <BeatLoader color= {"rgb(54, 215,183"}/>
+            :
+            user? 
+            <DraftLoginScreen user = {user} onLogout = {onLogout} setLoading = {setLoading}/>
+            : 
+            <>
+              <LoginDraft onLogin={onLogin} setLoading = {setLoading}/>
+              <Link to = "/signup">Sign Up</Link>
+            </>
+            }
+          </Route>
+        </Switch>
       </header>
     </div>
   );
