@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import DraftLoginScreen from './components/DraftLoginScreen';
 import LoginDraft from './components/LoginDraft';
 
 function App() {
@@ -17,10 +18,19 @@ function App() {
   function onLogin(user){
     setLoggedInUser(user)
   }
+
+  function onLogout(user){
+    setLoggedInUser(false)
+    fetch("/logout", {
+      method: "DELETE",
+    }).then(()=> console.log("logout successful"));
+  }
   return (
     <div className="App">
       <header className="App-header">
-        {loggedInUser? <h1>Hello {loggedInUser.username}</h1>: <LoginDraft onLogin={onLogin}/>}
+        {loggedInUser? 
+        <DraftLoginScreen user = {loggedInUser} onLogout = {onLogout}/>
+        : <LoginDraft onLogin={onLogin}/>}
       </header>
     </div>
   );
