@@ -1,22 +1,31 @@
 import React from "react"
 import { useState } from "react";
 
-function LoginDraft(){
+function LoginDraft({onLogin}){
 
-    const [formData, setFormData] = useState({username: "", password: ""})
+    const [username, setUsername] = useState('')
 
     function handleChange(e){
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
+        setUsername(e.target.value)
+    }
+
+    function handleSubmit(e){
+        e.preventDefault()
+
+        fetch("/login",{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({username})
         })
+        .then((r)=> r.json())
+        .then((user)=> onLogin(user))
     }
     return(
-        <form>
+        <form onSubmit={handleSubmit}>
             <label>Username: </label>
-            <input name = "username" type={"text"} onChange = {handleChange} value = {formData.username}/>
-            <label>Password: </label>
-            <input name = "password" type={"text"} onChange = {handleChange} value = {formData.password}/>
+            <input name = "username" type={"text"} onChange = {handleChange} value = {username}/>
             <input type={"submit"}/>
         </form>
     )
