@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
-rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
+rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
+rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+before_action :authorize, only: [:show]
 
     def index
         users = User.all
@@ -21,6 +23,14 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
     
     def user_params
         params.permit(:username, :password, :password_confirmation)
+    end
+
+    def authorize
+        return render json: {errors: ["Not authorized"]}, status: :unauthorized unless session.include? :user_id
+    end
+
+    def render_not_found_response
+        render json: {errors: "User not in session"}, status: :not_found
     end
 
     def render_unprocessable_entity_response invalid

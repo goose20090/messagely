@@ -9,8 +9,10 @@ import DraftSignup from './components/DraftSignup';
 
 function App() {
 
+  const [errors, setErrors] = useState("")
   const {user, setUser} = useContext(UserContext)
   const [loading, setLoading] = useState(true)
+
 
   useEffect(()=> {
     fetch("/me").then((r)=>{
@@ -20,7 +22,7 @@ function App() {
           setLoading(false);
         })
       }
-      else {setLoading(false)}
+      else setLoading(false)
     })
   }, []);
 
@@ -40,6 +42,8 @@ function App() {
     });
 
   }
+
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -55,7 +59,8 @@ function App() {
             <DraftLoginScreen user = {user} onLogout = {onLogout} setLoading = {setLoading}/>
             : 
             <>
-              <LoginDraft onLogin={onLogin} setLoading = {setLoading}/>
+              <LoginDraft onLogin={onLogin} setLoading = {setLoading} setErrors= {setErrors}/>
+              {<p>{errors}</p>}
               <Link to = "/signup">Sign Up</Link>
             </>
             }
