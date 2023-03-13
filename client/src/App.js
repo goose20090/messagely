@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import LoginDraft from './components/LoginDraft';
 
 function App() {
 
   const [loggedInUser, setLoggedInUser] = useState(false)
+
+  useEffect(()=> {
+    fetch("/me").then((r)=>{
+      if (r.ok){
+        r.json().then((user)=> setLoggedInUser(user))
+      }
+    })
+  }, []);
 
   function onLogin(user){
     setLoggedInUser(user)
