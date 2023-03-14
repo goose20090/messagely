@@ -1,8 +1,8 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-function Login({setLoading, onLogin}){
+function Login({setLoading, onLogin, loginErrors, setLoginErrors}){
 
     const history = useHistory();
 
@@ -10,6 +10,14 @@ function Login({setLoading, onLogin}){
         username: "",
         password: ""
     })
+
+    const [showErrors, setShowErrors] = useState({})
+
+    useEffect(()=>{
+        console.log(loginErrors)
+        setShowErrors(loginErrors)
+    }, [])
+
 
     function handleChange(e){
         setFormData({
@@ -19,9 +27,9 @@ function Login({setLoading, onLogin}){
     }
 
     function handleSubmit(e){
+        setLoading(true)
         e.preventDefault()
         console.log(e)
-        setLoading(true)
 
         fetch("/login",{
             method: "POST",
@@ -38,13 +46,13 @@ function Login({setLoading, onLogin}){
                     history.push("/messages")
                 })
             }
-            // else {
-            //     r.json().then((errorData)=> {
-            //         console.log(errorData);
-            //         setLoading(false)
-            //         setErrors(errorData.error)
-            //     })
-            // }
+            else {
+                r.json().then((errorData)=> {
+                    console.log(errorData.error);
+                    setLoginErrors(errorData)
+                    setLoading(false)
+                })
+            }
         })
     }
     return (
@@ -63,14 +71,14 @@ function Login({setLoading, onLogin}){
                         Password
                     </label>
                     <input value = {formData.password} onChange = {handleChange} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************"/>
-                    <p className="text-red-500 text-xs italic">Please choose a password.</p>
+                    <p className="text-red-500 text-xs italic"> {showErrors.error ? showErrors.error : "Please enter your password."}</p>
                     </div>
                     <div className="flex items-center justify-between">
-                    <button onClick= {handleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                    <button onClick= {handleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                         Sign In
                     </button>
                     <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
-                        Forgot Password?
+                        Sign Up
                     </a>
                     </div>
                 </form>

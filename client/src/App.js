@@ -7,10 +7,11 @@ import Login from './components/Login';
 import { UserContext } from './context/user';
 import { Link, Route, Switch } from 'react-router-dom';
 import DraftSignup from './components/DraftSignup';
+import MessagesPage from './components/Messages';
 
 function App() {
 
-  const [errors, setErrors] = useState("")
+  const [loginErrors, setLoginErrors] = useState("")
   const {user, setUser} = useContext(UserContext)
   const [loading, setLoading] = useState(true)
 
@@ -27,31 +28,31 @@ function handleChange(e){
     })
 }
 
-function handleSubmit(e){
-    e.preventDefault()
-    setLoading(true)
+// function handleSubmit(e){
+//     e.preventDefault()
+//     setLoading(true)
 
-    fetch("/login",{
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData)
-    })
-    .then((r)=> {
-        console.log(r)
-        if (r.ok){
-            r.json().then((user)=> onLogin(user))
-        }
-        else {
-            r.json().then((errorData)=> {
-                console.log(errorData);
-                setLoading(false)
-                setErrors(errorData.error)
-            })
-        }
-    })
-}
+//     fetch("/login",{
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(formData)
+//     })
+//     .then((r)=> {
+//         console.log(r)
+//         if (r.ok){
+//             r.json().then((user)=> onLogin(user))
+//         }
+//         else {
+//             r.json().then((errorData)=> {
+//                 console.log(errorData);
+//                 setLoading(false)
+//                 setErrors(errorData.error)
+//             })
+//         }
+//     })
+// }
 
 
   useEffect(()=> {
@@ -68,20 +69,11 @@ function handleSubmit(e){
 
   function onLogin(user){
     setUser(user)
+    setLoginErrors({})
     console.log("login successful")
     setLoading(false)
   }
 
-  function onLogout(){
-    setUser(false)
-    fetch("/logout", {
-      method: "DELETE",
-    }).then(()=> {
-      console.log("logout successful");
-      setLoading(false);
-    });
-
-  }
 
   
   return (
@@ -91,11 +83,13 @@ function handleSubmit(e){
           <Route path = "/signup">
             <DraftSignup onLogin = {onLogin} setLoading = {setLoading}/>
           </Route>
-          <Route path = "/messages">
-            <h1>{user? user.username: null}</h1>
+          <Route path = "/messages" >
+            <MessagesPage user = {user} setUser= {setUser} setLoading = {setLoading}/>
           </Route>
           <Route path = "/">
-            {loading ? <BeatLoader color= {"rgb(54, 215,183"}/>: <Login onLogin={onLogin} setLoading = {setLoading}/>}
+            <div className="flex flex-col items-center justify-center h-screen">
+              {loading ? <BeatLoader color= {"rgb(54, 215,183"}/>: <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors}/>}
+            </div>
           </Route>
         </Switch>
       </header>
