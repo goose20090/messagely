@@ -87,8 +87,8 @@ function handleChange(e){
             <MessagesPage user = {user} setUser= {setUser} setLoading = {setLoading}/>
           </Route>
           <Route path = "/">
-            <div className="flex flex-col items-center justify-center h-screen">
-              {loading ? <BeatLoader color= {"rgb(54, 215,183"}/>: <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors}/>}
+            <div>
+              {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors}/>}
             </div>
           </Route>
         </Switch>
@@ -99,17 +99,3 @@ function handleChange(e){
 
 export default App;
 
-
-
-// {loading?
-//   <BeatLoader color= {"rgb(54, 215,183"}/>
-//   :
-//   user? 
-//   <DraftLoginScreen user = {user} onLogout = {onLogout} setLoading = {setLoading}/>
-//   : 
-//   <>
-//     <LoginDraft onLogin={onLogin} setLoading = {setLoading} setErrors= {setErrors}/>
-//     {<p>{errors}</p>}
-//     <Link to = "/signup">Sign Up</Link>
-//   </>
-//   }
