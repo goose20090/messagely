@@ -49,7 +49,7 @@ function App() {
       <header className="App-header">
         <Switch>
           <Route path = "/signup">
-            <DraftSignup onLogin = {onLogin}/>
+            <DraftSignup onLogin = {onLogin} setLoading = {setLoading}/>
           </Route>
           <Route path = "/">
             {loading?

@@ -11,7 +11,7 @@ function DraftLoginScreen({user, onLogout, setLoading}){
 
     return(
         <div>
-            <h1>{user.username}</h1>
+            <h1>Hi {user.username}</h1>
             <button onClick={handleLogout}>Log Out</button>
         </div>
     )
