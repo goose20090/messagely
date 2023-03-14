@@ -1,12 +1,12 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-function DraftSignup({onLogin, setLoading}){
+function Signup({onLogin, setLoading, signUpErrors, setSignupErrors}){
 
     const history = useHistory();
 
-    const [errors, setErrors] = useState(false) 
+
 
     const [formData, setFormData] = useState({
         username: "",
@@ -14,10 +14,17 @@ function DraftSignup({onLogin, setLoading}){
         password_confirmation:""
     })
 
+    const [showErrors, setShowErrors] = useState(false) 
+
+    useEffect(()=>{
+        setShowErrors(signUpErrors)
+    }, [])
+
+
     function handleChange(e){
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [e.target.id]: e.target.value
         })
     }
 
@@ -34,13 +41,13 @@ function DraftSignup({onLogin, setLoading}){
             if (r.ok){
                 r.json().then((user)=> {
                     onLogin(user)
-                    history.push("/")
+                    history.push("/messages")
                 })
             }
             else {
                 r.json().then((errorData)=>{
                     console.log(errorData)
-                    setErrors(errorData)
+                    setSignupErrors(errorData)
                     setLoading(false)
                 })
             }
@@ -56,24 +63,26 @@ function DraftSignup({onLogin, setLoading}){
                     <img className="mx-auto h-12 w-auto" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQrj9NjU28zWCx-Cz-GvfjNdOgXa8zKJgdyBsHnFT45zgIdLnO7vZ9Yiwqaw_UeoLeu6Y&usqp=CAU" alt="Your Company"/>
                     <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign Up</h2>
                     </div>
-                    <form className="mt-8 space-y-6" action="#" method="POST">
+                    <form onSubmit = {handleSubmit} className="mt-8 space-y-6" action="#" method="POST">
                     <input type="hidden" name="remember" value="true"/>
                     <div className="-space-y-px rounded-md shadow-sm">
                         <div>
                         <label htmlFor="username" className="font-bold">Username</label>
-                        <input id="username" name="username" type="username" autoComplete="username" required className="relative block w-full rounded border-0 py-1.5 px-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Username"/>
+                        <input value = {formData.username} onChange = {handleChange} id="username" name="username" type="username" autoComplete="username" required className="relative block w-full rounded border-0 py-1.5 px-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Username"/>
                         </div>
                     </div>
 
                     <div>
                         <label htmlFor="password" className="font-bold">Password</label>
-                        <input id="password" name="password" type="password" autoComplete="current-password" required className="relative block w-full rounded border-0 py-1.5 px-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Password"/>
+                        <input value = {formData.password} onChange = {handleChange}id="password" name="password" type="password" autoComplete="current-password" required className="relative block w-full rounded border-0 py-1.5 px-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Password"/>
                         </div>
 
                     <div>
                         <label htmlFor="confirm password" className="font-bold">Confirm Password</label>
-                        <input id="confirm password" name="confirm password" type="confirm password" autoComplete="current-password" required className="relative block w-full rounded border-0 py-1.5 px-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Confirm Password"/>
+                        <input value = {formData.password_confirmation} onChange = {handleChange}id="password_confirmation" name="confirm password" type="password" autoComplete="current-password" required className="relative block w-full rounded border-0 py-1.5 px-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Confirm Password"/>
                     </div>
+
+                    {showErrors.errors?<div className="flex"><p className="text-red-500 text-xs italic"> {showErrors.errors[0]}</p></div>: null}
 
                     <div className="flex items-end justify-start">
                         <div className="flex items-center">
@@ -95,9 +104,8 @@ function DraftSignup({onLogin, setLoading}){
                     </form>
                 </div>
             </div>
-            {errors? <p>{errors.errors}</p>: null}
         </>
     )
 }
 
-export default DraftSignup;
+export default Signup;

@@ -58,7 +58,7 @@ function Login({setLoading, onLogin, loginErrors, setLoginErrors}){
                 <div className="w-full max-w-md space-y-8">
                     <div>
                     <img className="mx-auto h-12 w-auto" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQrj9NjU28zWCx-Cz-GvfjNdOgXa8zKJgdyBsHnFT45zgIdLnO7vZ9Yiwqaw_UeoLeu6Y&usqp=CAU" alt="Your Company"/>
-                    <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+                    <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Log in to your account</h2>
                     </div>
                     <form className="mt-8 space-y-6" action="#" method="POST" onSubmit = {handleSubmit}>
                         <input type="hidden" name="remember" value="true"/>
@@ -81,8 +81,8 @@ function Login({setLoading, onLogin, loginErrors, setLoginErrors}){
                             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">Remember me</label>
                             </div>
 
-                            <div class="text-sm">
-                                <Link to = "/signup" class="font-medium text-indigo-600 hover:text-indigo-500">Not signed up yet?</Link>
+                            <div className="text-sm">
+                                <Link to = "/signup" className="font-medium text-indigo-600 hover:text-indigo-500">Not signed up yet?</Link>
                             </div>
                         </div>
 
@@ -109,35 +109,3 @@ function Login({setLoading, onLogin, loginErrors, setLoginErrors}){
 
 
 export default Login;
-
-    //     <div className="flex flex-col items-center justify-center h-screen ">
-    //         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
-    //         <div className="w-full max-w-xs">
-    //         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-    //             <div className="mb-4">
-    //             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-    //                 Username
-    //             </label>
-    //             <input value = {formData.username} onChange = {handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username"/>
-    //             </div>
-    //             <div className="mb-6">
-    //             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-    //                 Password
-    //             </label>
-    //             <input value = {formData.password} onChange = {handleChange} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************"/>
-    //             <p className="text-red-500 text-xs italic"> {showErrors.error ? showErrors.error : "Please enter your password."}</p>
-    //             </div>
-    //             <div className="flex items-center justify-between">
-    //             <button onClick= {handleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-    //                 Sign In
-    //             </button>
-    //             <Link to = "/signup" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
-    //                 Sign Up
-    //             </Link>
-    //             </div>
-    //         </form>
-    //         <p className="text-center text-gray-500 text-xs">
-    //             &copy;2023 Messagely Corp. All rights reserved.
-    //         </p>
-    //         </div>
-    //     </div>

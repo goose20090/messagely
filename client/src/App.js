@@ -1,59 +1,19 @@
 import { useState, useEffect, useContext } from 'react';
 import './App.css';
-import DraftLoginScreen from './components/DraftLoginScreen';
-import LoginDraft from './components/LoginDraft';
 import BeatLoader from 'react-spinners/BeatLoader'
 import Login from './components/Login';
 import { UserContext } from './context/user';
-import { Link, Route, Switch } from 'react-router-dom';
-import DraftSignup from './components/DraftSignup';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import Signup from './components/Signup';
 import MessagesPage from './components/Messages';
 
 function App() {
 
   const [loginErrors, setLoginErrors] = useState("")
+  const [signupErrors, setSignupErrors] = useState({})
   const {user, setUser} = useContext(UserContext)
   const [loading, setLoading] = useState(true)
-
-
-  const [formData, setFormData] = useState({
-    username: "",
-    password: ""
-})
-
-function handleChange(e){
-    setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
-    })
-}
-
-// function handleSubmit(e){
-//     e.preventDefault()
-//     setLoading(true)
-
-//     fetch("/login",{
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(formData)
-//     })
-//     .then((r)=> {
-//         console.log(r)
-//         if (r.ok){
-//             r.json().then((user)=> onLogin(user))
-//         }
-//         else {
-//             r.json().then((errorData)=> {
-//                 console.log(errorData);
-//                 setLoading(false)
-//                 setErrors(errorData.error)
-//             })
-//         }
-//     })
-// }
-
+  const history = useHistory();
 
   useEffect(()=> {
     fetch("/me").then((r)=>{
@@ -61,6 +21,7 @@ function handleChange(e){
         r.json().then((user)=> {
           setUser(user);
           setLoading(false);
+          history.push("/messages")
         })
       }
       else setLoading(false)
@@ -74,22 +35,19 @@ function handleChange(e){
     setLoading(false)
   }
 
-
   
   return (
     <div className="App">
       <header className="App-header">
         <Switch>
           <Route path = "/signup">
-            <DraftSignup onLogin = {onLogin} setLoading = {setLoading}/>
+            {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Signup onLogin = {onLogin} setLoading = {setLoading} setSignupErrors = {setSignupErrors} signUpErrors = {signupErrors}/>}
           </Route>
           <Route path = "/messages" >
             <MessagesPage user = {user} setUser= {setUser} setLoading = {setLoading}/>
           </Route>
           <Route path = "/">
-            <div>
-              {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors}/>}
-            </div>
+            {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors}/>}
           </Route>
         </Switch>
       </header>
