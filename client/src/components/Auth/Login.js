@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, Redirect } from "react-router-dom";
 
-function Login({setLoading, onLogin, loginErrors, setLoginErrors, setSignupErrors}){
+function Login({setLoading, onLogin, loginErrors, setLoginErrors, setSignupErrors, user}){
 
     const history = useHistory();
 
@@ -54,6 +54,9 @@ function Login({setLoading, onLogin, loginErrors, setLoginErrors, setSignupError
             }
         })
     }
+
+    if (user) return <Redirect to ="/messages"/>;
+
     return (
         <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="w-full max-w-md space-y-8">

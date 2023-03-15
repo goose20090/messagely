@@ -2,12 +2,14 @@ import { useState, useEffect, useContext } from 'react';
 import './App.css';
 import Login from "./components/Auth/Login"
 import { UserContext } from './context/user';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Signup from "./components/Auth/Signup";
 import MessagesPage from "./components/MessagesPage/MessagesPage";
 import Loader from './components/Auth/Loader';
 
 function App() {
+
+  
 
   const [loginErrors, setLoginErrors] = useState("")
   const [signupErrors, setSignupErrors] = useState({})
@@ -36,6 +38,7 @@ function App() {
   }
 
   
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -51,12 +54,13 @@ function App() {
           <Route path = "/">
             {loading ? <Loader/>
             :
-            <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors} setSignupErrors = {setSignupErrors}/>}
+            <Login user = {user} onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors} setSignupErrors = {setSignupErrors}/>}
           </Route>
         </Switch>
       </header>
     </div>
   );
+
 }
 
 export default App;
