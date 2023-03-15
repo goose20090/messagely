@@ -15,7 +15,9 @@ before_action :authorize, only: [:show]
 
     def create
         user = User.create!(user_params)
-        session[:user_id] = user.id
+        if params[:remember_me]
+            session[:user_id] = user.id
+        end
         render json: user, status: :created
     end
 

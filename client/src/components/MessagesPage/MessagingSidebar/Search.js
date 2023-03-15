@@ -4,7 +4,7 @@ function Search(){
     return(
         <div class="flex flex-row items-center border-b pb-2 border-indigo-600">
             <div class="flex flex-row items-center">
-            <div class="text-xl font-semibold">Messages</div>
+            <div class="text-xl font-semibold">User Messages</div>
             <div class="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
                 5
             </div>

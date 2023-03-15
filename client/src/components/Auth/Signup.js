@@ -11,7 +11,8 @@ function Signup({onLogin, setLoading, signUpErrors, setSignupErrors, setLoginErr
     const [formData, setFormData] = useState({
         username: "",
         password: "",
-        password_confirmation:""
+        password_confirmation:"",
+        remember_me: false
     })
 
     const [showErrors, setShowErrors] = useState(false) 
@@ -23,10 +24,21 @@ function Signup({onLogin, setLoading, signUpErrors, setSignupErrors, setLoginErr
 
 
     function handleChange(e){
-        setFormData({
-            ...formData,
-            [e.target.id]: e.target.value
-        })
+
+        if (e.target.id === "remember-me"){
+
+            setFormData({
+                ...formData,
+                remember_me: !formData.remember_me
+            })
+
+        }
+         else {
+            setFormData({
+                ...formData,
+                [e.target.id]: e.target.value
+            })
+        }
     }
 
     function handleSubmit(e){
@@ -87,7 +99,7 @@ function Signup({onLogin, setLoading, signUpErrors, setSignupErrors, setLoginErr
 
                     <div className="flex items-end justify-between">
                         <div className="flex items-center">
-                        <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
+                        <input value = {formData.remember_me} onChange = {handleChange} id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
                         <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">Remember me</label>
                         </div>
                         <div className="text-sm">
