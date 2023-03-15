@@ -41,13 +41,13 @@ function App() {
       <header className="App-header">
         <Switch>
           <Route path = "/signup">
-            {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Signup onLogin = {onLogin} setLoading = {setLoading} setSignupErrors = {setSignupErrors} signUpErrors = {signupErrors}/>}
+            {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Signup onLogin = {onLogin} setLoading = {setLoading} setSignupErrors = {setSignupErrors} signUpErrors = {signupErrors} setLoginErrors = {setLoginErrors}/>}
           </Route>
           <Route path = "/messages" >
             <MessagesPage user = {user} setUser= {setUser} setLoading = {setLoading}/>
           </Route>
           <Route path = "/">
-            {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors}/>}
+            {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors} setSignupErrors = {setSignupErrors}/>}
           </Route>
         </Switch>
       </header>

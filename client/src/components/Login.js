@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 
-function Login({setLoading, onLogin, loginErrors, setLoginErrors}){
+function Login({setLoading, onLogin, loginErrors, setLoginErrors, setSignupErrors}){
 
     const history = useHistory();
 
@@ -15,6 +15,7 @@ function Login({setLoading, onLogin, loginErrors, setLoginErrors}){
 
     useEffect(()=>{
         setShowErrors(loginErrors)
+        setSignupErrors("")
     }, [])
 
 

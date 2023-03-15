@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
-function Signup({onLogin, setLoading, signUpErrors, setSignupErrors}){
+function Signup({onLogin, setLoading, signUpErrors, setSignupErrors, setLoginErrors}){
 
     const history = useHistory();
 
@@ -18,6 +18,7 @@ function Signup({onLogin, setLoading, signUpErrors, setSignupErrors}){
 
     useEffect(()=>{
         setShowErrors(signUpErrors)
+        setLoginErrors("")
     }, [])
 
 
@@ -84,10 +85,13 @@ function Signup({onLogin, setLoading, signUpErrors, setSignupErrors}){
 
                     {showErrors.errors?<div className="flex"><p className="text-red-500 text-xs italic"> {showErrors.errors[0]}</p></div>: null}
 
-                    <div className="flex items-end justify-start">
+                    <div className="flex items-end justify-between">
                         <div className="flex items-center">
                         <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
                         <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">Remember me</label>
+                        </div>
+                        <div className="text-sm">
+                                <Link to = "/login" className="font-medium text-indigo-600 hover:text-indigo-500">Already have an account?</Link>
                         </div>
                     </div>
 
