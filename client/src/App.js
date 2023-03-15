@@ -1,11 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
 import './App.css';
-import BeatLoader from 'react-spinners/BeatLoader'
-import Login from './components/Login';
+import Login from "./components/Auth/Login"
 import { UserContext } from './context/user';
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
-import Signup from './components/Signup';
-import MessagesPage from './components/MessagesPage';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import Signup from "./components/Auth/Signup";
+import MessagesPage from "./components/MessagesPage/MessagesPage";
+import Loader from './components/Auth/Loader';
 
 function App() {
 
@@ -41,13 +41,17 @@ function App() {
       <header className="App-header">
         <Switch>
           <Route path = "/signup">
-            {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Signup onLogin = {onLogin} setLoading = {setLoading} setSignupErrors = {setSignupErrors} signUpErrors = {signupErrors} setLoginErrors = {setLoginErrors}/>}
+            {loading ? <Loader/>
+            : 
+            <Signup onLogin = {onLogin} setLoading = {setLoading} setSignupErrors = {setSignupErrors} signUpErrors = {signupErrors} setLoginErrors = {setLoginErrors}/>}
           </Route>
           <Route path = "/messages" >
             <MessagesPage user = {user} setUser= {setUser} setLoading = {setLoading}/>
           </Route>
           <Route path = "/">
-            {loading ? <div className="flex flex-col items-center justify-center h-screen"><BeatLoader color= {"rgb(54, 215,183"}/> </div>: <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors} setSignupErrors = {setSignupErrors}/>}
+            {loading ? <Loader/>
+            :
+            <Login onLogin={onLogin} setLoading = {setLoading} loginErrors = {loginErrors} setLoginErrors = {setLoginErrors} setSignupErrors = {setSignupErrors}/>}
           </Route>
         </Switch>
       </header>
