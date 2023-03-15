@@ -5,7 +5,7 @@ import Login from './components/Login';
 import { UserContext } from './context/user';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Signup from './components/Signup';
-import MessagesPage from './components/Messages';
+import MessagesPage from './components/MessagesPage';
 
 function App() {
 
