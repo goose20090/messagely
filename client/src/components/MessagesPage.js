@@ -1,5 +1,4 @@
 /** @format */
-
 import React from "react";
 import { Redirect } from "react-router-dom";
 import MessagingSidebar from "./MessagingSidebar";
@@ -9,6 +8,11 @@ import ConversationOption from "./ConversationOption";
 import ConversationsContainer from "./ConversationsContainer";
 import NewConversationButton from "./NewConversationButton";
 import Search from "./Search";
+import ConversationTitle from "./ConversationTitle";
+import MessagesContainer from "./MessagesContainer";
+import NewMessageEntry from "./NewMessageEntry";
+import ReceivedMessage from "./RecievedMessage";
+import UserMessage from "./UserMessage";
 
 function MessagesPage({ user, setUser, setLoading }) {
   if (!user) return <Redirect to="/" />;
@@ -41,15 +45,22 @@ function MessagesPage({ user, setUser, setLoading }) {
       </div> */}
       <div class="flex h-screen flex-row text-gray-800 antialiased">
         <MessagingSidebar>
-          <Search/>
+          <Search />
           <ConversationsContainer>
-              <ConversationList>
-                  <ConversationOption/>
-              </ConversationList>
-            <NewConversationButton/>
+            <ConversationList>
+              <ConversationOption />
+            </ConversationList>
+            <NewConversationButton />
           </ConversationsContainer>
         </MessagingSidebar>
-        <ConversationShow/>
+        <ConversationShow>
+          <ConversationTitle onLogout={onLogout} />
+          <MessagesContainer>
+            <ReceivedMessage />
+            <UserMessage />
+          </MessagesContainer>
+          <NewMessageEntry />
+        </ConversationShow>
       </div>
     </>
   );
