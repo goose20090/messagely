@@ -23,11 +23,17 @@ end
 
 # create messages for each conversation
 Conversation.all.each do |conversation|
+
+  user_id_1 = User.all.sample.id
+  user_id_2 = User.all.sample.id
+
+  users = [user_id_1, user_id_2]
   # create 10 messages for each conversation
-  10.times do
+  5.times do
+
     Message.create!(
       content: Faker::Lorem.sentence,
-      user_id: User.all.sample.id,
+      user_id: users.sample,
       conversation_id: conversation.id
     )
   end

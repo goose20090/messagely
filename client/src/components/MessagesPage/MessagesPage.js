@@ -1,5 +1,5 @@
 /** @format */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // ConversationShow components
@@ -23,10 +23,13 @@ function MessagesPage({ user, setUser, setLoading }) {
 
   const conversations = useSelector((state)=>state.conversations.entities)
 
+  const [displayConv, setDisplayConv]= useState(conversations[0])
+
   const dispatch = useDispatch();
 
   useEffect(()=> {
     dispatch(fetchConversations());
+    setDisplayConv(conversations[0])
   }, [dispatch])
 
   function onLogout() {
@@ -40,24 +43,29 @@ function MessagesPage({ user, setUser, setLoading }) {
     });
   }
 
-  console.log(conversations)
+
+
   if (!user) return <Redirect to="/" />;
   return (
       <div className="flex h-screen flex-row text-gray-800 antialiased">
         <MessagingSidebar>
-          <Search />
+          <Search user = {user} />
           <ConversationsContainer>
             <ConversationList>
-              <ConversationOption />
+              {conversations.map((conversation)=> <ConversationOption conversation = {conversation}/>)}
             </ConversationList>
             <NewConversationButton />
           </ConversationsContainer>
         </MessagingSidebar>
         <ConversationShow>
-          <ConversationTitle onLogout={onLogout} />
+          <ConversationTitle onLogout={onLogout} conversation = {displayConv}/>
           <MessagesContainer>
-            <ReceivedMessage />
-            <UserMessage />
+            {displayConv.messages.map((mess)=> {
+              if (mess.id === user.id){
+                return <UserMessage message = {mess}/>
+              }
+              else return <ReceivedMessage message = {mess}/>
+              })}
           </MessagesContainer>
           <NewMessageEntry />
         </ConversationShow>

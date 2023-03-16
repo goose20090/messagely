@@ -1,14 +1,15 @@
 import React from "react";
+import useStringify from "../../../utilities/useStringify"
 
-function ConversationTitle({onLogout}){
+function ConversationTitle({onLogout, conversation}){
+
+
+    const usernamesString = useStringify(conversation.users)
     return(
         <div className="flex flex-row items-center justify-between rounded-2xl py-4 px-6 shadow">
             <div class = "flex">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-500 text-pink-100">
-                    T
-                </div>
                 <div className="ml-3 flex flex-col">
-                    <div className="text-sm font-semibold">UI Art Design</div>
+                    <div className="text-sm font-semibold">{usernamesString}</div>
                     <div className="text-xs text-gray-500">Active</div>
                 </div>
             </div>

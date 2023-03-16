@@ -1,10 +1,10 @@
 import React from "react";
 
-function Search(){
+function Search({user}){
     return(
         <div className="flex flex-row items-center border-b pb-2 border-indigo-600">
             <div className="flex flex-row items-center">
-            <div className="text-xl font-semibold">User Messages</div>
+            <div className="text-xl font-semibold">{user.username}'s Messages</div>
             <div className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
                 5
             </div>
