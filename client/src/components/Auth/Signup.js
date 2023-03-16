@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 
+
 function Signup({onLogin, setLoading, signUpErrors, setSignupErrors, setLoginErrors}){
 
     const history = useHistory();

@@ -2,10 +2,10 @@ import React from "react";
 
 function NewConversationButton(){
     return(
-        <div class="absolute bottom-0 right-0 mr-2">
-        <button class="flex h-10 w-10 items-center justify-center rounded-full bg-red-500 text-white shadow-sm">
+        <div className="absolute bottom-0 right-0 mr-2">
+        <button className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500 text-white shadow-sm">
           <svg
-            class="h-6 w-6"
+            className="h-6 w-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -14,7 +14,7 @@ function NewConversationButton(){
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="2"
+              strokeWidth="2"
               d="M12 6v6m0 0v6m0-6h6m-6 0H6"
             ></path>
           </svg>

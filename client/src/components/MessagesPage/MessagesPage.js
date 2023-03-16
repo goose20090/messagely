@@ -1,6 +1,7 @@
 /** @format */
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 // ConversationShow components
 import ConversationShow from "./ConversationShow/ConversationShow";
 import ConversationTitle from "./ConversationShow/ConversationTitle";
@@ -15,9 +16,18 @@ import ConversationOption from "./MessagingSidebar/ConversationOption";
 import ConversationsContainer from "./MessagingSidebar/ConversationsContainer";
 import NewConversationButton from "./MessagingSidebar/NewConversationButton";
 import Search from "./MessagingSidebar/Search";
+import { fetchConversations } from "../../conversationsSlice";
  
 function MessagesPage({ user, setUser, setLoading }) {
-  if (!user) return <Redirect to="/" />;
+
+
+  const conversations = useSelector((state)=>state.conversations.entities)
+
+  const dispatch = useDispatch();
+
+  useEffect(()=> {
+    dispatch(fetchConversations());
+  }, [dispatch])
 
   function onLogout() {
     setLoading(true);
@@ -30,8 +40,10 @@ function MessagesPage({ user, setUser, setLoading }) {
     });
   }
 
+  console.log(conversations)
+  if (!user) return <Redirect to="/" />;
   return (
-      <div class="flex h-screen flex-row text-gray-800 antialiased">
+      <div className="flex h-screen flex-row text-gray-800 antialiased">
         <MessagingSidebar>
           <Search />
           <ConversationsContainer>
