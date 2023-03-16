@@ -8,9 +8,6 @@ import MessagesPage from "./components/MessagesPage/MessagesPage";
 import Loader from './components/Auth/Loader';
 
 function App() {
-
-  
-
   const [loginErrors, setLoginErrors] = useState("")
   const [signupErrors, setSignupErrors] = useState({})
   const {user, setUser} = useContext(UserContext)
@@ -37,6 +34,18 @@ function App() {
     setLoading(false)
   }
 
+  function onLogout() {
+    setLoading(true);
+    setUser(false);
+    fetch("/logout", {
+      method: "DELETE",
+    }).then(() => {
+      console.log("logout successful");
+      setLoading(false);
+    });
+  }
+
+
   
   
   return (
@@ -49,7 +58,8 @@ function App() {
             <Signup onLogin = {onLogin} setLoading = {setLoading} setSignupErrors = {setSignupErrors} signUpErrors = {signupErrors} setLoginErrors = {setLoginErrors}/>}
           </Route>
           <Route path = "/messages" >
-            <MessagesPage user = {user} setUser= {setUser} setLoading = {setLoading}/>
+          {loading ? <Loader/>
+            : <MessagesPage onLogout= {onLogout}/>}
           </Route>
           <Route path = "/">
             {loading ? <Loader/>

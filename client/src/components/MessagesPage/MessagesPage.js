@@ -1,7 +1,6 @@
 /** @format */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 // ConversationShow components
 import ConversationShow from "./ConversationShow/ConversationShow";
 import ConversationTitle from "./ConversationShow/ConversationTitle";
@@ -16,60 +15,65 @@ import ConversationOption from "./MessagingSidebar/ConversationOption";
 import ConversationsContainer from "./MessagingSidebar/ConversationsContainer";
 import NewConversationButton from "./MessagingSidebar/NewConversationButton";
 import Search from "./MessagingSidebar/Search";
-import { fetchConversations } from "../../conversationsSlice";
- 
-function MessagesPage({ user, setUser, setLoading }) {
+import Loader from "../Auth/Loader";
+import { UserContext } from "../../context/user";
+
+function MessagesPage({ onLogout }) {
 
 
-  const conversations = useSelector((state)=>state.conversations.entities)
+  const [loading, setLoading] = useState(true)
 
-  const [displayConv, setDisplayConv]= useState(conversations[0])
+  const {user} = useContext(UserContext)
 
-  const dispatch = useDispatch();
+  const {conversations} = user
 
-  useEffect(()=> {
-    dispatch(fetchConversations());
-    setDisplayConv(conversations[0])
-  }, [dispatch])
+  const [currentConv, setCurrentConv] = useState({})
 
-  function onLogout() {
-    setLoading(true);
-    setUser(false);
-    fetch("/logout", {
-      method: "DELETE",
-    }).then(() => {
-      console.log("logout successful");
-      setLoading(false);
-    });
-  }
-
-
+  useEffect(()=>{
+    if(user){
+    setCurrentConv(conversations[0])
+    
+    setLoading(false)
+    }
+  },[])
 
   if (!user) return <Redirect to="/" />;
+
+
   return (
-      <div className="flex h-screen flex-row text-gray-800 antialiased">
-        <MessagingSidebar>
-          <Search user = {user} />
-          <ConversationsContainer>
-            <ConversationList>
-              {conversations.map((conversation)=> <ConversationOption conversation = {conversation}/>)}
-            </ConversationList>
-            <NewConversationButton />
-          </ConversationsContainer>
-        </MessagingSidebar>
-        <ConversationShow>
-          <ConversationTitle onLogout={onLogout} conversation = {displayConv}/>
-          <MessagesContainer>
-            {displayConv.messages.map((mess)=> {
-              if (mess.id === user.id){
-                return <UserMessage message = {mess}/>
-              }
-              else return <ReceivedMessage message = {mess}/>
+    <div>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="flex h-screen flex-row text-gray-800 antialiased">
+          <MessagingSidebar>
+            <Search user={user} />
+            <ConversationsContainer>
+              <ConversationList>
+                {conversations.map((conversation)=> <ConversationOption key = {conversation.id} conversation={conversation} setCurrentConv = {setCurrentConv}/>)}
+              </ConversationList>
+              <NewConversationButton />
+            </ConversationsContainer>
+          </MessagingSidebar>
+          <ConversationShow>
+            {
+              <ConversationTitle
+                onLogout={onLogout}
+                currentConv = {currentConv}
+              />
+            }
+            <MessagesContainer>
+              {currentConv.messages.map((message) => {
+                if (message.user_id === user.id) {
+                  return <UserMessage message={message} key={message.id} />;
+                } else return <ReceivedMessage message={message} key={message.id} />;
               })}
-          </MessagesContainer>
-          <NewMessageEntry />
-        </ConversationShow>
-      </div>
+            </MessagesContainer>
+            <NewMessageEntry />
+          </ConversationShow>
+          </div>
+      )}
+    </div>
   );
 }
 

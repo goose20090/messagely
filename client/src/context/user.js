@@ -11,3 +11,8 @@ function UserProvider ({children}){
 }
 
 export {UserContext, UserProvider}
+
+// functions to find associated data
+
+
+// functions to update specific data etc.

@@ -3,6 +3,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useHistory, Redirect } from "react-router-dom";
+import { useContext } from "react";
 
 function Login({
   setLoading,
@@ -17,8 +18,9 @@ function Login({
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    remember_me: false,
+    remember_me: true,
   });
+  
 
   const [showErrors, setShowErrors] = useState({});
 
@@ -133,11 +135,11 @@ function Login({
           <div className="flex items-end justify-between">
             <div className="flex items-center">
               <input
-                value={formData.remember}
                 onChange={handleChange}
                 id="remember_me"
                 name="remember-me"
                 type="checkbox"
+                checked = {formData.remember_me}
                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
               />
               <label
