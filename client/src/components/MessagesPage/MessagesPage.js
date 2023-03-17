@@ -14,9 +14,10 @@ import ConversationList from "./MessagingSidebar/ConversationList";
 import ConversationOption from "./MessagingSidebar/ConversationOption";
 import ConversationsContainer from "./MessagingSidebar/ConversationsContainer";
 import NewConversationButton from "./MessagingSidebar/NewConversationButton";
-import Search from "./MessagingSidebar/Search";
+import Search from "./MessagingSidebar/SearchBar/Search";
 import Loader from "../Auth/Loader";
 import { UserContext } from "../../context/user";
+
 
 function MessagesPage({ onLogout }) {
 
@@ -47,7 +48,7 @@ function MessagesPage({ onLogout }) {
       ) : (
         <div className="flex h-screen flex-row text-gray-800 antialiased">
           <MessagingSidebar>
-            <Search user={user} />
+            <Search user = {user}/>
             <ConversationsContainer>
               <ConversationList>
                 {conversations.map((conversation)=> <ConversationOption key = {conversation.id} conversation={conversation} setCurrentConv = {setCurrentConv}/>)}
