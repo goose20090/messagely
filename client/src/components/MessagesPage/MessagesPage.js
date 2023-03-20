@@ -17,6 +17,7 @@ import NewConversationButton from "./MessagingSidebar/NewConversationButton";
 import Search from "./MessagingSidebar/SearchBar/Search";
 import Loader from "../Auth/Loader";
 import { UserContext } from "../../context/user";
+import NewConversationForm from "./MessagingSidebar/NewConversationForm";
 
 
 function MessagesPage({ onLogout }) {
@@ -24,22 +25,37 @@ function MessagesPage({ onLogout }) {
 
   const [loading, setLoading] = useState(true)
 
+  const [addingConv, setAddingConv] = useState(false)
+
   const {user} = useContext(UserContext)
 
+  const [allUsers, setAllUsers] = useState([])
+
+  
   const {conversations} = user
 
   const [currentConv, setCurrentConv] = useState({})
 
+  let uniqueConversations
+  let uniqueUsers
+
+  if (user){
+   uniqueConversations = [...new Map(conversations.map((conversation) => [conversation["id"], conversation])).values()];
+
+  }
+
   useEffect(()=>{
     if(user){
-    setCurrentConv(conversations[0])
-    
+    setCurrentConv(uniqueConversations[0])
     setLoading(false)
+    fetch('/users')
+    .then((res)=> res.json())
+    .then((res)=> setAllUsers(res))
     }
   },[])
 
-  if (!user) return <Redirect to="/" />;
 
+  if (!user) return <Redirect to="/" />;
 
   return (
     <div>
@@ -51,9 +67,10 @@ function MessagesPage({ onLogout }) {
             <Search user = {user}/>
             <ConversationsContainer>
               <ConversationList>
-                {conversations.map((conversation)=> <ConversationOption key = {conversation.id} conversation={conversation} setCurrentConv = {setCurrentConv}/>)}
+                {uniqueConversations.map((conversation)=> <ConversationOption key = {conversation.id} conversation={conversation} setCurrentConv = {setCurrentConv}/>)}
+                {addingConv? <NewConversationForm allUsers = {allUsers}/>: null}
               </ConversationList>
-              <NewConversationButton />
+              <NewConversationButton setAddingConv = {setAddingConv}/>
             </ConversationsContainer>
           </MessagingSidebar>
           <ConversationShow>
@@ -61,6 +78,7 @@ function MessagesPage({ onLogout }) {
               <ConversationTitle
                 onLogout={onLogout}
                 currentConv = {currentConv}
+                setLoading= {setLoading}
               />
             }
             <MessagesContainer>
@@ -70,7 +88,7 @@ function MessagesPage({ onLogout }) {
                 } else return <ReceivedMessage message={message} key={message.id} />;
               })}
             </MessagesContainer>
-            <NewMessageEntry />
+            <NewMessageEntry currentConv ={currentConv} user = {user} setCurrentConv = {setCurrentConv}/>
           </ConversationShow>
           </div>
       )}

@@ -4,7 +4,7 @@ import React from "react";
 
 function SearchInput({handleBlur, handleFocus, isFocused}) {
   return (
-    <div class="max-w- mx-auto">
+    <div className="max-w- mx-auto min-h-50">
     <form action="" className="relative mx-auto w-max">
       <input
         onFocus={handleFocus}

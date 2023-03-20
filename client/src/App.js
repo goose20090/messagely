@@ -40,6 +40,7 @@ function App() {
     fetch("/logout", {
       method: "DELETE",
     }).then(() => {
+      setUser(false)
       console.log("logout successful");
       setLoading(false);
     });

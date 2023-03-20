@@ -1,9 +1,13 @@
 import React from "react";
 
-function NewConversationButton(){
+function NewConversationButton({setAddingConv}){
+
+  function handleClick(){
+    setAddingConv(true)
+  }
     return(
-        <div className="absolute bottom-0 right-0 mr-2">
-        <button className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500 text-white shadow-sm">
+        <div className="absolute bottom-0 right-0 mr-2" >
+        <button className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500 text-white shadow-sm" onClick={handleClick}>
           <svg
             className="h-6 w-6"
             fill="none"

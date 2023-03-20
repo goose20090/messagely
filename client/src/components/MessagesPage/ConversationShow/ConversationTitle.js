@@ -9,7 +9,7 @@ function ConversationTitle({onLogout, currentConv}){
     const usernamesString = useStringify(currentUsers)
     return(
         <div className="flex flex-row items-center justify-between rounded-2xl py-4 px-6 shadow">
-            <div class = "flex">
+            <div className= "flex">
                 <div className="ml-3 flex flex-col">
                     <div className="text-sm font-semibold">{usernamesString}</div>
                     <div className="text-xs text-gray-500">Active</div>

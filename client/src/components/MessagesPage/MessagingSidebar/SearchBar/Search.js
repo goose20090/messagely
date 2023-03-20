@@ -23,7 +23,7 @@ function Search({ user }) {
   }, [searching]);
 
   return (
-    <div className="flex justify-start border-b border-indigo-600 pb-2">
+    <div className="flex justify-start border-b border-indigo-600 pb-2 h-min-20 ">
       {searching ? null : (
        <SidebarTitle user = {user}/>
       )}

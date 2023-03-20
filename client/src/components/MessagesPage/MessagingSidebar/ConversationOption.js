@@ -1,16 +1,19 @@
 /** @format */
 
-import React, { useContext } from "react";
-import { UserContext } from "../../../context/user";
+import React from "react";
+
 
 function ConversationOption({setCurrentConv, conversation}) { 
 
-  const {user} = useContext(UserContext)
 
   const {messages} = conversation
 
   const lastMessage = messages.slice(-1)[0]
 
+  function handleClick(e){
+    setCurrentConv(conversation)
+    console.log(conversation)
+  }
 
 
   return (
@@ -21,7 +24,7 @@ function ConversationOption({setCurrentConv, conversation}) {
       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-pink-500 font-bold text-pink-300">
       {lastMessage.user.username[0].toUpperCase()}
       </div>
-      <div className="ml-3 flex flex-grow flex-col cursor-pointer" onClick={()=>setCurrentConv(conversation)}>
+      <div className="ml-3 flex flex-grow flex-col cursor-pointer" onClick={handleClick}>
         <div className="text-sm font-medium">{lastMessage.user.username}</div>
         <div className="w-40 truncate text-xs">
           {lastMessage.content}
