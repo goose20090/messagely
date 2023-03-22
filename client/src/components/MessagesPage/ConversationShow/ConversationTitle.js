@@ -2,11 +2,9 @@ import React from "react";
 import useStringify from "../../../utilities/useStringify"
 
 
-function ConversationTitle({onLogout, currentConv}){
+function ConversationTitle({onLogout, currentConvUsers}){
 
-    const currentUsers = currentConv.messages.map((message)=> message.user)
-
-    const usernamesString = useStringify(currentUsers)
+    const usernamesString = useStringify(currentConvUsers)
     return(
         <div className="flex flex-row items-center justify-between rounded-2xl py-4 px-6 shadow">
             <div className= "flex">

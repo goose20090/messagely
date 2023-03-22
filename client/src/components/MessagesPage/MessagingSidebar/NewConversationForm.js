@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 
-function NewConversationForm({ allUsers }) {
+function NewConversationForm({ allUsers, handleAddConv }) {
   const [showOptions, setShowOptions] = useState(false);
   const [options, setOptions] = useState(allUsers);
   const [filterText, setFilterText] = useState("");
   const [newConvoUsers, setNewConvoUsers] = useState([]);
   const [newUserAdded, setNewUserAdded] = useState(false)
 
-
+  function onClick(){
+    handleAddConv(newConvoUsers)
+  }
 
 
   const filteredOptions = options.filter((option) =>
@@ -107,7 +109,7 @@ function NewConversationForm({ allUsers }) {
           ))}
         </div>
       )}
-      <button className="mt-2 rounded-full bg-indigo-500 py-1 px-4 font-bold text-white hover:bg-indigo-700">
+      <button onClick = {onClick} className="mt-2 rounded-full bg-indigo-500 py-1 px-4 font-bold text-white hover:bg-indigo-700">
         Start Conversation
       </button>
     </div>
