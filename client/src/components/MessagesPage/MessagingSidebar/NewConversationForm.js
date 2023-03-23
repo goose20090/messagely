@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 function NewConversationForm({ allUsers, handleAddConv }) {
+
   const [showOptions, setShowOptions] = useState(false);
   const [options, setOptions] = useState(allUsers);
   const [filterText, setFilterText] = useState("");
@@ -95,7 +96,7 @@ function NewConversationForm({ allUsers, handleAddConv }) {
         onBlur={handleBlur}
       />
       {showOptions && (
-        <div className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg">
+        <div className="absolute z-10 mt-1 w-full h-auto max-h-40 rounded-md overflow-auto bg-white shadow-lg">
           {filteredOptions.map((option) => (
             <p
               key={option.id}

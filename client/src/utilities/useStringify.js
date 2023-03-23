@@ -1,26 +1,38 @@
 import React from "react";
+import { useContext } from "react";
+import { UserContext } from "../context/user";
 
 function useStringify(users){
+     
+    const {user} = useContext(UserContext)
+    if (!users){
+        return
+    }
+
 
     const usernames = users.map((user)=> user.username)
-    const unique = Array.from(new Set(usernames))
+    const uniqueUsernames = Array.from(new Set(usernames))
 
     let string = ""
 
-    for( let i = 0; i < unique.length; i++ ){
-        
-        if(i === (unique.length - 1)){
-            string += `and ${unique[i]}`
+    for (let i = 0; i < uniqueUsernames.length; i++) {
+        let usernameStr
+        if (uniqueUsernames[i] === user.username){
+            usernameStr = 'me'
         }
-
-        else if (i === (unique.length - 2)){
-            string += `${unique[i]} `
+        else {
+            usernameStr = uniqueUsernames[i]
         }
-        else{
-            string+= `${unique[i]}, `
+        switch (i) {
+            case uniqueUsernames.length - 1:
+                string += `and ${usernameStr}`;
+                break;
+            case uniqueUsernames.length - 2:
+                string += `${usernameStr} `;
+                break;
+            default:
+                string += `${usernameStr}, `;
         }
-
-        
     }
     return string
 }

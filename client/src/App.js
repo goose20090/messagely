@@ -18,10 +18,10 @@ function App() {
     fetch("/me").then((r)=>{
       if (r.ok){
         r.json().then((user)=> {
-          console.log(user)
-          // setUser(user);
-          // setLoading(false);
-          // history.push("/messages")
+          // console.log(user)
+          setUser(user);
+          setLoading(false);
+          history.push("/messages")
         })
       }
       else setLoading(false)
@@ -47,9 +47,6 @@ function App() {
     });
   }
 
-
-  
-  
   return (
     <div className="App">
       <header className="App-header">

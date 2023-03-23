@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
             if params[:remember_me]
                 session[:user_id] = user.id
             end
-        render json: user, include: ['conversations', 'conversations.messages', 'conversations.messages.user'], status: :created
+        render json: user, include: ['conversations', 'conversations.users', 'conversations.messages', 'conversations.messages.user'], status: :created
         else
             render json: { error: "Invalid username or password" }, status: :unauthorized
         end

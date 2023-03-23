@@ -10,7 +10,7 @@ before_action :authorize, only: [:show]
 
     def show
         user = User.find_by(id: session[:user_id])
-        render json: user
+        render json: user, include: ['conversations.messages', 'conversations.users', 'conversations.messages.user']
     end
 
     def create
