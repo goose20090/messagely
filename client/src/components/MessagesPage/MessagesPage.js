@@ -53,29 +53,12 @@ function MessagesPage({ onLogout }) {
     setCurrentConv(convo);
   }
 
-  function handleAddConv(newConvObj) {
-    const addedUserIds = newConvObj.users.map((user) => {
-      return { id: user.id };
-    });
-    const newConvUserIds = [...addedUserIds, { id: user.id }];
-    fetch("/conversations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        new_conv_user_ids: newConvUserIds,
-        title: newConvObj.title,
-      }),
-    })
-      .then((r) => r.json())
-      .then((r) => {
-        setUserConvos([...conversations, r])
-        setUser({
-          ...user,
-          conversations: [...conversations, r]
-        })
-      });
+  function handleAddConv(newConv){
+    setUserConvos([...conversations, newConv])
+      setUser({
+        ...user,
+        conversations: [...conversations, newConv]
+      })
   }
 
   if (!user) return <Redirect to="/" />;
