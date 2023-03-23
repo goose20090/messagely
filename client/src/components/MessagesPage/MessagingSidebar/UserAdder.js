@@ -1,20 +1,15 @@
 /** @format */
-import React from "react";
-import { useState, useRef } from "react";
 
-function NewConversationForm({ allUsers, handleAddConv }) {
+import React, { useState } from "react";
 
+function UserAdder({ allUsers, handleAddUsers }) {
   const [showOptions, setShowOptions] = useState(false);
   const [options, setOptions] = useState(allUsers);
   const [filterText, setFilterText] = useState("");
-  const [newConvObj, setNewConvObj]= useState({
-    title: "",
-    users: []
-  })
+  const [newConvoUsers, setNewConvoUsers] = useState([]);
 
-  const optionInputRef = useRef();
   function onClick() {
-    handleAddConv(newConvObj);
+    handleAddUsers(newConvoUsers);
   }
 
   const filteredOptions = options.filter((option) =>
@@ -25,6 +20,20 @@ function NewConversationForm({ allUsers, handleAddConv }) {
     setFilterText(event.target.value);
     setShowOptions(true);
   };
+
+  function handleOptionClick(e) {
+    setShowOptions(false);
+    setFilterText("");
+    let newUser = allUsers.find(
+      (user) => user.username === e.target.textContent
+    );
+    setNewConvoUsers([...newConvoUsers, newUser]);
+
+    const newOptions = options.filter((user) => user.id !== newUser.id);
+
+    setOptions(newOptions);
+  }
+
   function handleBlur() {
     setShowOptions(false);
   }
@@ -32,61 +41,43 @@ function NewConversationForm({ allUsers, handleAddConv }) {
   function handleNewConvoUserDelete(e) {
     const deletedUserId = e.target.id;
 
-    const filteredConvoUsers = newConvObj.users.filter(
+    const filteredConvoUsers = newConvoUsers.filter(
       (user) => user.id != deletedUserId
     );
 
     const filteredUser = allUsers.find((user) => user.id == deletedUserId);
 
-    setNewConvObj({
-      ...newConvObj,
-      users: filteredConvoUsers
-    });
+    setNewConvoUsers(filteredConvoUsers);
 
     setOptions([...options, filteredUser]);
   }
 
   function handleOptionClick(e) {
-    optionInputRef.current.blur()
+    document.getElementById("search-input").blur();
     setShowOptions(false);
     setFilterText("");
     let newUser = allUsers.find(
       (user) => user.username === e.target.textContent
     );
-
-    setNewConvObj({
-      ...newConvObj,
-      users: [...newConvObj.users, newUser]
-    })
+    setNewConvoUsers([...newConvoUsers, newUser]);
 
     const newOptions = options.filter((user) => user.id !== newUser.id);
 
     setOptions(newOptions);
   }
-
-  function handleTitleChange(e){
-    setNewConvObj({
-      ...newConvObj,
-      title: e.target.value
-    })
-  }
-
   return (
-    <div className="relative ml-auto mr-auto w-10/12 rounded border bg-white p-2">
-          <div>
+    <div>
       <div>
       <h4>Name new conversation:</h4>
       <input
         id="search-input"
         type="text"
-        value={newConvObj.title}
-        onChange = {handleTitleChange}
         placeholder="e.g 'Family Chat'"
         className="mr-4 w-full rounded-md border border-gray-300 py-2 pl-2 text-sm placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
       />
         <div>
           <h4>Add recipients:</h4>
-          {newConvObj.users.map((user) => (
+          {newConvoUsers.map((user) => (
             <p
               key={user.id}
               className="m-1 rounded bg-indigo-500 px-4 font-bold text-white hover:bg-indigo-700"
@@ -104,7 +95,6 @@ function NewConversationForm({ allUsers, handleAddConv }) {
         </div>
         <input
           id="search-input"
-          ref={optionInputRef}
           type="text"
           placeholder="Search.."
           className="w-full rounded-md border border-gray-300 py-2 pl-2 pr-4 text-sm placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
@@ -136,9 +126,8 @@ function NewConversationForm({ allUsers, handleAddConv }) {
       >
         Create Conversation
       </button>
-      </div>
-      </div>
+    </div>
   );
 }
 
-export default NewConversationForm;
+export default UserAdder;

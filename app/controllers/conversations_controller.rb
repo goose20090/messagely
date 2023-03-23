@@ -6,8 +6,7 @@ class ConversationsController < ApplicationController
     end
 
     def create
-
-        conversation = Conversation.create
+        conversation = Conversation.create(title: params[:title])
         params[:new_conv_user_ids].each do |user_obj|
             user = User.find(user_obj[:id])
             conversation.users << user

@@ -39,7 +39,6 @@ function MessagesPage({ onLogout }) {
 
   const [currentConvUsers, setCurrentConvUsers] = useState([]);
 
-  let uniqueConversations;
 
   useEffect(() => {
     if (user) {
@@ -57,8 +56,8 @@ function MessagesPage({ onLogout }) {
     setCurrentConv(convo);
   }
 
-  function handleAddConv(addedUsers) {
-    const addedUserIds = addedUsers.map((user) => {
+  function handleAddConv(newConvObj) {
+    const addedUserIds = newConvObj.users.map((user) => {
       return { id: user.id };
     });
     const newConvUserIds = [...addedUserIds, { id: user.id }];
@@ -67,16 +66,17 @@ function MessagesPage({ onLogout }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ new_conv_user_ids: newConvUserIds }),
+      body: JSON.stringify({
+        new_conv_user_ids: newConvUserIds,
+        title: newConvObj.title,
+      }),
     })
       .then((r) => r.json())
       .then((r) => setUserConvos([...conversations, r]));
   }
 
-  console.log(userConvos);
-
   if (!user) return <Redirect to="/" />;
-
+  console.log(userConvos)
   return (
     <div>
       {loading ? (
@@ -88,25 +88,12 @@ function MessagesPage({ onLogout }) {
             <ConversationsContainer>
               <ConversationList>
                 {userConvos
-                  ? userConvos.map((conversation) => {
-                      if (conversation.messages.length > 0) {
-                        return (
-                          <ConversationOption
-                            key={conversation.id}
-                            conversation={conversation}
-                            handleChangeCurrentConvo={handleChangeCurrentConvo}
-                          />
-                        );
-                      } else {
-                        return (
-                          <NewConversationOption
-                            key={conversation.id}
-                            conversation={conversation}
-                            handleChangeCurrentConvo={handleChangeCurrentConvo}
-                          />
-                        );
-                      }
-                    })
+                  ? userConvos.map((conversation) => <ConversationOption
+                        key={conversation.id}
+                        conversation={conversation}
+                        handleChangeCurrentConvo={handleChangeCurrentConvo}
+                      />
+                    )
                   : null}
                 {addingConv ? (
                   <NewConversationForm

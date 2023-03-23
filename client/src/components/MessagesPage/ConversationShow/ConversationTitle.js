@@ -4,8 +4,7 @@ import useStringify from "../../../utilities/useStringify"
 
 function ConversationTitle({onLogout, currentConv}){
 
-    const currentConvUsers = currentConv.messages.map((message)=> message.user)
-    const usernamesString = useStringify(currentConvUsers)
+    const usernamesString = useStringify(currentConv.users)
     return(
         <div className="flex flex-row items-center justify-between rounded-2xl py-4 px-6 shadow">
             <div className= "flex">

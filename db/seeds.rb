@@ -17,7 +17,9 @@ end
 
 # Create 5 conversations and associate them with random users
 5.times do |i|
-  conversation = Conversation.create
+  conversation = Conversation.create(
+    title: Faker::Lorem.words(number: 3).join(' ')
+  )
 
   # Add 2 random users to each conversation
   users = User.order(Arel.sql('RANDOM()')).limit(2)

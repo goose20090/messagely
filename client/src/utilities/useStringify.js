@@ -18,7 +18,7 @@ function useStringify(users){
     for (let i = 0; i < uniqueUsernames.length; i++) {
         let usernameStr
         if (uniqueUsernames[i] === user.username){
-            usernameStr = 'me'
+            usernameStr = 'Me'
         }
         else {
             usernameStr = uniqueUsernames[i]
