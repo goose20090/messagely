@@ -3,18 +3,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 // ConversationShow components
 import ConversationShow from "./ConversationShow/ConversationShow";
-import ConversationTitle from "./ConversationShow/ConversationTitle";
+import ConversationHeader from "./ConversationShow/ConversationHeader";
 import MessagesContainer from "./ConversationShow/MessagesContainer";
 import NewMessageEntry from "./ConversationShow/NewMessageEntry";
 import ReceivedMessage from "./ConversationShow/RecievedMessage";
 import UserMessage from "./ConversationShow/UserMessage";
+import ConversationTitle from "./ConversationShow/ConversationTitle";
 // MessagingSidebar components
 import MessagingSidebar from "./MessagingSidebar/MessagingSidebar";
 import ConversationList from "./MessagingSidebar/ConversationList";
 import ConversationOption from "./MessagingSidebar/ConversationOption";
 import ConversationsContainer from "./MessagingSidebar/ConversationsContainer";
 import NewConversationButton from "./MessagingSidebar/NewConversationButton";
-import NewConversationOption from "./MessagingSidebar/NewConversationOption";
 import Search from "./MessagingSidebar/SearchBar/Search";
 import Loader from "../Auth/Loader";
 import { UserContext } from "../../context/user";
@@ -27,7 +27,7 @@ function MessagesPage({ onLogout }) {
   const [addingConv, setAddingConv] = useState(false);
 
   // User context object
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const { conversations } = user;
 
@@ -36,9 +36,6 @@ function MessagesPage({ onLogout }) {
   const [allUsers, setAllUsers] = useState([]);
 
   const [currentConv, setCurrentConv] = useState({});
-
-  const [currentConvUsers, setCurrentConvUsers] = useState([]);
-
 
   useEffect(() => {
     if (user) {
@@ -72,11 +69,17 @@ function MessagesPage({ onLogout }) {
       }),
     })
       .then((r) => r.json())
-      .then((r) => setUserConvos([...conversations, r]));
+      .then((r) => {
+        setUserConvos([...conversations, r])
+        setUser({
+          ...user,
+          conversations: [...conversations, r]
+        })
+      });
   }
 
   if (!user) return <Redirect to="/" />;
-  console.log(userConvos)
+
   return (
     <div>
       {loading ? (
@@ -88,17 +91,19 @@ function MessagesPage({ onLogout }) {
             <ConversationsContainer>
               <ConversationList>
                 {userConvos
-                  ? userConvos.map((conversation) => <ConversationOption
+                  ? userConvos.map((conversation) => (
+                      <ConversationOption
                         key={conversation.id}
                         conversation={conversation}
                         handleChangeCurrentConvo={handleChangeCurrentConvo}
                       />
-                    )
+                    ))
                   : null}
                 {addingConv ? (
                   <NewConversationForm
                     allUsers={allUsers}
                     handleAddConv={handleAddConv}
+                    setAddingConv={setAddingConv}
                   />
                 ) : null}
               </ConversationList>
@@ -106,13 +111,21 @@ function MessagesPage({ onLogout }) {
             </ConversationsContainer>
           </MessagingSidebar>
           <ConversationShow>
-            {
-              <ConversationTitle
-                onLogout={onLogout}
-                currentConv={currentConv}
-                setLoading={setLoading}
-              />
-            }
+            <ConversationHeader>
+              <div className="flex items-center justify-between p-3 shadow rounded-2xl">
+                {currentConv ? (
+                  <ConversationTitle currentConv={currentConv} />
+                ) : <>
+                <div/>
+                <h1 className="font-bold">Welcome to Messagely</h1></>}
+                <button
+                  onClick={onLogout}
+                  className="float-right rounded-full bg-indigo-500 py-1 px-4 font-bold text-white hover:bg-indigo-700"
+                >
+                  Log Out
+                </button>
+              </div>
+            </ConversationHeader>
             <MessagesContainer>
               {currentConv
                 ? currentConv.messages.map((message) => {

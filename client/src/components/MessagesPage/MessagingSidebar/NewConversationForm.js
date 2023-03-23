@@ -2,7 +2,7 @@
 import React from "react";
 import { useState, useRef } from "react";
 
-function NewConversationForm({ allUsers, handleAddConv }) {
+function NewConversationForm({ allUsers, handleAddConv, setAddingConv }) {
 
   const [showOptions, setShowOptions] = useState(false);
   const [options, setOptions] = useState(allUsers);
@@ -15,6 +15,7 @@ function NewConversationForm({ allUsers, handleAddConv }) {
   const optionInputRef = useRef();
   function onClick() {
     handleAddConv(newConvObj);
+    setAddingConv(false);
   }
 
   const filteredOptions = options.filter((option) =>
