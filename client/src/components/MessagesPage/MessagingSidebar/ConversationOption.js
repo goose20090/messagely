@@ -1,20 +1,28 @@
+/** @format */
+
 import React, { useRef, useState, useEffect } from "react";
 import DropdownMenu from "../DropdownMenu";
 import { faPenSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import ConfirmationModal from "../ConfirmationModal";
 
 function ConversationOption({ handleChangeCurrentConvo, conversation }) {
   const { messages } = conversation;
-  const [isEditing, setIsEditing] = useState(false)
-  const [titleMaster, setTitleMaster] = useState(conversation.title)
-  const [title, setTitle] = useState(conversation.title)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [titleMaster, setTitleMaster] = useState(conversation.title);
+  const [title, setTitle] = useState(conversation.title);
   const titleInputRef = useRef();
 
   const lastMessage = messages.slice(-1)[0];
 
   function handleClick(e) {
     handleChangeCurrentConvo(conversation);
+  }
+
+  function handleDelete(e) {
+    setIsModalOpen(true);
   }
 
   const dropdownItems = [
@@ -26,7 +34,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
         </>
       ),
       action: () => {
-        setIsEditing(true)
+        setIsEditing(true);
       },
     },
     {
@@ -37,7 +45,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
         </>
       ),
       action: () => {
-        console.log("Option 2 clicked");
+        handleDelete();
       },
     },
   ];
@@ -45,19 +53,17 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
   useEffect(() => {
     if (isEditing) {
       titleInputRef.current.focus();
-
     }
   }, [isEditing]);
 
-
-  function handleSubmit(e){
-    e.preventDefault()
-    setTitleMaster(title)
-    setIsEditing(false)
-    handleConversationEdit()
+  function handleSubmit(e) {
+    e.preventDefault();
+    setTitleMaster(title);
+    setIsEditing(false);
+    handleConversationEdit();
   }
 
-  function handleConversationEdit(){
+  function handleConversationEdit() {
     fetch(`/conversations/${conversation.id}`, {
       method: "PATCH",
       headers: {
@@ -68,42 +74,53 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
       }),
     })
       .then((r) => r.json())
-      .then((editedConversation) =>console.log(editedConversation));
+      .then((editedConversation) => console.log(editedConversation));
   }
 
-
-
-  function handleBlur(){
+  function handleBlur() {
     setIsEditing(false);
-    setTitle(titleMaster)
+    setTitle(titleMaster);
   }
 
   return (
     <div className="relative flex flex-row items-center p-4">
+      {isModalOpen && <ConfirmationModal open={isModalOpen} setOpen={setIsModalOpen} title = {title} setIsModalOpen = {setIsModalOpen}/>}
       <div className="absolute right-0 top-0 mr-4 mt-3 text-xs text-gray-500">
-      <DropdownMenu items={dropdownItems} />
+        <DropdownMenu items={dropdownItems} />
       </div>
       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-pink-500 font-bold text-pink-300">
         {lastMessage
           ? lastMessage.user.username[0].toUpperCase()
           : conversation.users[0].username[0].toUpperCase()}
       </div>
-      <div className="ml-3 flex flex-grow flex-col cursor-pointer" onClick={handleClick}>
+      <div
+        className="ml-3 flex flex-grow cursor-pointer flex-col"
+        onClick={handleClick}
+      >
         <div className="text-sm font-medium">
-          {isEditing?
-          <form onSubmit={handleSubmit}>
-            <input ref = {titleInputRef} value={title} onBlur= {handleBlur}onChange ={(e)=> setTitle(e.target.value)} className=" text-indigo-500"/>
-          </form>:
-          <span>{titleMaster}</span>}
+          {isEditing ? (
+            <form onSubmit={handleSubmit}>
+              <input
+                ref={titleInputRef}
+                value={title}
+                onBlur={handleBlur}
+                onChange={(e) => setTitle(e.target.value)}
+                className=" text-indigo-500"
+              />
+            </form>
+          ) : (
+            <span>{titleMaster}</span>
+          )}
         </div>
         <div className="w-40 truncate text-xs">
-          <span className="font-bold mr-2">
+          <span className="mr-2 font-bold">
             {lastMessage ? `${lastMessage.user.username} :` : null}
           </span>
-          {lastMessage ? 
-          lastMessage.deleted? 
-          "Message Deleted":
-          lastMessage.content : "No messages yet"}
+          {lastMessage
+            ? lastMessage.deleted
+              ? "Message Deleted"
+              : lastMessage.content
+            : "No messages yet"}
         </div>
       </div>
       <div className="ml-2 mb-1 flex-shrink-0 self-end">
@@ -111,7 +128,6 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
           3
         </span>
       </div>
-
     </div>
   );
 }
