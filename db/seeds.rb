@@ -35,6 +35,7 @@ end
     message = Message.create(
       content: Faker::Lorem.sentence(word_count: 5),
       read: true,
+      deleted: false,
       user: users.sample,
       conversation: conversation
     )
