@@ -23,6 +23,6 @@ class MessagesController < ApplicationController
     end
 
     def message_params
-        params.permit(:content)
+        params.permit(:content, :user_id, :conversation_id, :deleted)
     end
 end

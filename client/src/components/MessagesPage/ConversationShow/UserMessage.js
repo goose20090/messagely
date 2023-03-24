@@ -4,9 +4,11 @@ import { faPenSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import autosize from "autosize";
+import DeletedMessage from "./DeletedMessage";
 
 function UserMessage({ message }) {
   const [isEditing, setIsEditing] = useState(false)
+  const [isDeleted, setIsDeleted] = useState(false)
   const [messageContent, setMessageContent] = useState(message.content)
   const messageInputRef = useRef()
   const dropdownItems = [
@@ -29,7 +31,8 @@ function UserMessage({ message }) {
         </>
       ),
       action: () => {
-        console.log("Option 2 clicked");
+        setIsDeleted(true)
+        handleDeleteSubmit()
       },
     },
     // Add more options as needed
@@ -49,10 +52,10 @@ function UserMessage({ message }) {
   function handleKeyDown(e){
     if (e.key === "Enter" && !e.shiftKey){
       e.preventDefault()
-      handleSubmit()
+      handleEditSubmit()
     }
   }
-  function handleSubmit(){
+  function handleEditSubmit(){
     setIsEditing(false)
 
     fetch(`/messages/${message.id}`,{
@@ -68,8 +71,26 @@ function UserMessage({ message }) {
     .then((r)=> console.log(r))
   }
 
+  function handleDeleteSubmit(){
+    fetch(`/messages/${message.id}`,{
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        deleted: true
+      })
+    })
+    .then((r)=> r.json())
+    .then((r)=> console.log(r))
+  }
+
   return (
     <div className="col-start-6 col-end-13 rounded-lg p-3">
+      {
+        isDeleted || message.deleted ?
+        <DeletedMessage/>
+        :
       <div className="flex flex-row-reverse items-center justify-start">
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
           {message.user.username[0].toUpperCase()}
@@ -93,7 +114,7 @@ function UserMessage({ message }) {
             )}
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }
