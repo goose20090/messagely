@@ -78,7 +78,8 @@ function UserMessage({ message }) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        deleted: true
+        deleted: true,
+        content: null
       })
     })
     .then((r)=> r.json())
@@ -89,7 +90,9 @@ function UserMessage({ message }) {
     <div className="col-start-6 col-end-13 rounded-lg p-3">
       {
         isDeleted || message.deleted ?
-        <DeletedMessage/>
+        <div className="flex flex-row-reverse items-center justify-start">
+          <DeletedMessage/>
+        </div>
         :
       <div className="flex flex-row-reverse items-center justify-start">
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">

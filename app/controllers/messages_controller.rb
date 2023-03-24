@@ -11,7 +11,6 @@ class MessagesController < ApplicationController
     end
 
     def update
-        byebug
         message = find_message
         message.update!(message_params)
         render json: message
