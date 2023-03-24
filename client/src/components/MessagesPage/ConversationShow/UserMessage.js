@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import autosize from "autosize";
 import DeletedMessage from "./DeletedMessage";
 
-function UserMessage({ message }) {
+function UserMessage({ message, handleMessageMutation }) {
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false)
   const [messageContent, setMessageContent] = useState(message.content)
@@ -68,7 +68,7 @@ function UserMessage({ message }) {
       })
     })
     .then((r)=> r.json())
-    .then((r)=> console.log(r))
+    .then((editedMessage)=> handleMessageMutation(editedMessage))
   }
 
   function handleDeleteSubmit(){
@@ -83,7 +83,7 @@ function UserMessage({ message }) {
       })
     })
     .then((r)=> r.json())
-    .then((r)=> console.log(r))
+    .then((deletedMessage)=> handleMessageMutation(deletedMessage))
   }
 
   return (

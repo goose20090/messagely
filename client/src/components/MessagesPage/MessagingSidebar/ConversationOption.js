@@ -55,7 +55,10 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
           <span className="font-bold mr-2">
             {lastMessage ? `${lastMessage.user.username} :` : null}
           </span>
-          {lastMessage ? lastMessage.content : "No messages yet"}
+          {lastMessage ? 
+          lastMessage.deleted? 
+          "Message Deleted":
+          lastMessage.content : "No messages yet"}
         </div>
       </div>
       <div className="ml-2 mb-1 flex-shrink-0 self-end">

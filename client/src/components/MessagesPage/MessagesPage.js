@@ -61,6 +61,54 @@ function MessagesPage({ onLogout }) {
       })
   }
 
+  function handleMessageMutation(mutatedMessage) {
+    const newConversations = user.conversations.map(conversation => {
+      if (conversation.id === mutatedMessage.conversation_id) {
+        return {
+          ...conversation,
+          messages: conversation.messages.map(message => {
+            if (message.id === mutatedMessage.id) {
+              return mutatedMessage;
+            } else {
+              return message;
+            }
+          })
+        };
+      } else {
+        return conversation;
+      }
+    });
+
+    setUser({
+      ...user,
+      conversations: newConversations
+    });
+    setUserConvos(newConversations)
+  }
+
+  function handleAddMessage(addedMessage){
+    // setUser({
+    //   ...user,
+    //   messages: [...currentConv.messages, addedMessage]
+    // })
+    setCurrentConv({
+      ...currentConv,
+      messages: [...currentConv.messages, addedMessage]
+    })
+    const newConversations = user.conversations.map(conversation => {
+      if (conversation.id === currentConv.id) {
+        return ({
+          ...conversation,
+          messages: [...currentConv.messages, addedMessage]
+          })}
+       else return conversation;
+      })
+
+    setUserConvos(newConversations)
+  }
+  
+
+
   if (!user) return <Redirect to="/" />;
 
   return (
@@ -113,10 +161,10 @@ function MessagesPage({ onLogout }) {
               {currentConv
                 ? currentConv.messages.map((message) => {
                     if (message.user_id === user.id) {
-                      return <UserMessage message={message} key={message.id} />;
+                      return <UserMessage message={message} handleMessageMutation = {handleMessageMutation} key={message.id} />;
                     } else
                       return (
-                        <ReceivedMessage message={message} key={message.id} />
+                        <ReceivedMessage message={message}  key={message.id} />
                       );
                   })
                 : null}
@@ -124,7 +172,7 @@ function MessagesPage({ onLogout }) {
             <NewMessageEntry
               currentConv={currentConv}
               user={user}
-              setCurrentConv={setCurrentConv}
+              handleAddMessage= {handleAddMessage}
             />
           </ConversationShow>
         </div>

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../../../context/user";
 
-function NewMessageEntry({currentConv, user, setCurrentConv}) {
+function NewMessageEntry({currentConv, user, handleAddMessage}) {
 
 
   const [message, setMessage] = useState('')
@@ -30,15 +30,7 @@ function NewMessageEntry({currentConv, user, setCurrentConv}) {
     })
     .then((r)=> r.json())
     .then((returnedMessage)=> {
-      console.log(returnedMessage)
-      setUser({
-        ...user,
-        messages: [...currentConv.messages, returnedMessage]
-      })
-      setCurrentConv({
-        ...currentConv,
-        messages: [...currentConv.messages, returnedMessage]
-      })
+      handleAddMessage(returnedMessage)
       setMessage('')
     }
     )
