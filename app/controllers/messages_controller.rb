@@ -13,6 +13,9 @@ class MessagesController < ApplicationController
     def update
         message = find_message
         message.update!(message_params)
+        if(params[:deleted])
+            message[:content] = nil
+        end
         render json: message
     end
     private

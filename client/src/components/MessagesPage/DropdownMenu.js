@@ -7,11 +7,11 @@ function DropdownMenu({ items }) {
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
 
-  const handleClick = (item) => {
+  function handleClick(item){
     item.action();
     setIsActive(false);
   };
-  const toggleDropdown = (e) => {
+  function toggleDropdown(e){
     e.stopPropagation();
     setIsActive(!isActive);
   };

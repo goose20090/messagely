@@ -1,4 +1,6 @@
-import React, {useState, useRef, useEffect} from "react";
+/** @format */
+
+import React, { useState, useRef, useEffect } from "react";
 import DropdownMenu from "../DropdownMenu";
 import { faPenSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -7,10 +9,11 @@ import autosize from "autosize";
 import DeletedMessage from "./DeletedMessage";
 
 function UserMessage({ message, handleMessageMutation }) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [isDeleted, setIsDeleted] = useState(false)
-  const [messageContent, setMessageContent] = useState(message.content)
-  const messageInputRef = useRef()
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [messageContentMaster, setMessageContentMaster] = useState(message.content)
+  const [messageContent, setMessageContent] = useState(message.content);
+  const messageInputRef = useRef();
   const dropdownItems = [
     {
       label: (
@@ -20,7 +23,7 @@ function UserMessage({ message, handleMessageMutation }) {
         </>
       ),
       action: () => {
-        setIsEditing(true)
+        setIsEditing(true);
       },
     },
     {
@@ -31,93 +34,98 @@ function UserMessage({ message, handleMessageMutation }) {
         </>
       ),
       action: () => {
-        setIsDeleted(true)
-        handleDeleteSubmit()
+        setIsDeleted(true);
+        handleDeleteSubmit();
       },
     },
-    // Add more options as needed
   ];
 
   useEffect(() => {
     if (isEditing) {
-      messageInputRef.current.focus()
-      autosize(messageInputRef.current)
+      messageInputRef.current.focus();
+      autosize(messageInputRef.current);
     }
-  }, [isEditing])
+  }, [isEditing]);
 
-  function handleMessageInputChange(e){
-    setMessageContent(e.target.value)
+  function handleMessageInputChange(e) {
+    setMessageContent(e.target.value);
   }
 
-  function handleKeyDown(e){
-    if (e.key === "Enter" && !e.shiftKey){
-      e.preventDefault()
-      handleEditSubmit()
+  function handleKeyDown(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleEditSubmit();
     }
   }
-  function handleEditSubmit(){
-    setIsEditing(false)
+  function handleEditSubmit() {
 
-    fetch(`/messages/${message.id}`,{
+    setMessageContentMaster(messageContent)
+    setIsEditing(false);
+
+    fetch(`/messages/${message.id}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        content: messageContent
-      })
+        content: messageContent,
+      }),
     })
-    .then((r)=> r.json())
-    .then((editedMessage)=> handleMessageMutation(editedMessage))
+      .then((r) => r.json())
+      .then((editedMessage) => handleMessageMutation(editedMessage));
   }
 
-  function handleDeleteSubmit(){
-    fetch(`/messages/${message.id}`,{
+  function handleDeleteSubmit() {
+    fetch(`/messages/${message.id}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         deleted: true,
-        content: null
-      })
+      }),
     })
-    .then((r)=> r.json())
-    .then((deletedMessage)=> handleMessageMutation(deletedMessage))
+      .then((r) => r.json())
+      .then((deletedMessage) => handleMessageMutation(deletedMessage));
+  }
+
+  function handleBlur(){
+    setIsEditing(false)
+    setMessageContent(messageContentMaster)
   }
 
   return (
     <div className="col-start-6 col-end-13 rounded-lg p-3">
-      {
-        isDeleted || message.deleted ?
+      {isDeleted || message.deleted ? (
         <div className="flex flex-row-reverse items-center justify-start">
-          <DeletedMessage/>
+          <DeletedMessage />
         </div>
-        :
-      <div className="flex flex-row-reverse items-center justify-start">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-          {message.user.username[0].toUpperCase()}
-        </div>
-        <div className="relative mr-3 rounded-xl bg-indigo-100 py-3 px-4 text-sm shadow">
-          <div className="absolute top-0 right-0 mr-1">
-            <DropdownMenu items={dropdownItems} />
+      ) : (
+        <div className="flex flex-row-reverse items-center justify-start">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
+            {message.user.username[0].toUpperCase()}
           </div>
-          <div>
-            {isEditing ? (
+          <div className="relative mr-3 rounded-xl bg-indigo-100 py-3 px-4 text-sm shadow">
+            <div className="absolute top-0 right-0 mr-1">
+              <DropdownMenu items={dropdownItems} />
+            </div>
+            <div>
+              {isEditing ? (
                 <textarea
                   className=" text-xs"
                   value={messageContent}
                   onChange={handleMessageInputChange}
                   ref={messageInputRef}
-                  onBlur={() => setIsEditing(false)}
-                  onKeyDown = {handleKeyDown}
+                  onBlur={handleBlur}
+                  onKeyDown={handleKeyDown}
                 />
-            ) : (
-              <span>{messageContent}</span>
-            )}
+              ) : (
+                <span>{messageContentMaster}</span>
+              )}
+            </div>
           </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 }

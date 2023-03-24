@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import DropdownMenu from "../DropdownMenu";
 import { faPenSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,6 +6,10 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 function ConversationOption({ handleChangeCurrentConvo, conversation }) {
   const { messages } = conversation;
+  const [isEditing, setIsEditing] = useState(false)
+  const [titleMaster, setTitleMaster] = useState(conversation.title)
+  const [title, setTitle] = useState(conversation.title)
+  const titleInputRef = useRef();
 
   const lastMessage = messages.slice(-1)[0];
 
@@ -22,7 +26,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
         </>
       ),
       action: () => {
-        console.log("Option 1 clicked");
+        setIsEditing(true)
       },
     },
     {
@@ -36,8 +40,26 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
         console.log("Option 2 clicked");
       },
     },
-    // Add more options as needed
   ];
+
+  useEffect(() => {
+    if (isEditing) {
+      titleInputRef.current.focus();
+
+    }
+  }, [isEditing]);
+
+
+  function handleInputEditSubmit(e){
+    e.preventDefault()
+    setTitleMaster(title)
+    setIsEditing(false)
+  }
+
+  function handleBlur(){
+    setIsEditing(false);
+    setTitle(titleMaster)
+  }
 
   return (
     <div className="relative flex flex-row items-center p-4">
@@ -50,7 +72,13 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
           : conversation.users[0].username[0].toUpperCase()}
       </div>
       <div className="ml-3 flex flex-grow flex-col cursor-pointer" onClick={handleClick}>
-        <div className="text-sm font-medium">{conversation.title}</div>
+        <div className="text-sm font-medium">
+          {isEditing?
+          <form onSubmit={handleInputEditSubmit}>
+            <input ref = {titleInputRef} value={title} onBlur= {handleBlur}onChange ={(e)=> setTitle(e.target.value)} className=" text-indigo-500"/>
+          </form>:
+          <span>{titleMaster}</span>}
+        </div>
         <div className="w-40 truncate text-xs">
           <span className="font-bold mr-2">
             {lastMessage ? `${lastMessage.user.username} :` : null}
