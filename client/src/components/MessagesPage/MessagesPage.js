@@ -31,6 +31,10 @@ function MessagesPage({ onLogout }) {
 
   const { conversations } = user;
 
+  let nonDeletedConvos
+  if (conversations){
+  nonDeletedConvos = conversations.filter((convo)=> !convo.deleted)
+  }
   const [userConvos, setUserConvos] = useState([]);
 
   const [allUsers, setAllUsers] = useState([]);
@@ -39,9 +43,8 @@ function MessagesPage({ onLogout }) {
 
   useEffect(() => {
     if (user) {
-      // console.log(conversations)
-      setUserConvos(conversations);
-      setCurrentConv(conversations[0]);
+      setUserConvos(nonDeletedConvos);
+      setCurrentConv(nonDeletedConvos[0]);
       setLoading(false);
       fetch("/users")
         .then((res) => res.json())
@@ -105,7 +108,7 @@ function MessagesPage({ onLogout }) {
   }
 
   if (!user) return <Redirect to="/" />;
-  console.log(user)
+  console.log(userConvos)
   return (
     <div>
       {loading ? (
@@ -117,13 +120,16 @@ function MessagesPage({ onLogout }) {
             <ConversationsContainer>
               <ConversationList>
                 {userConvos
-                  ? userConvos.map((conversation) => (
-                      <ConversationOption
+                  ? userConvos.map((conversation) => {
+                    if (conversation.deleted){
+                      return null}
+                    else return (
+                    <ConversationOption
                         key={conversation.id}
                         conversation={conversation}
                         handleChangeCurrentConvo={handleChangeCurrentConvo}
-                      />
-                    ))
+                      />)}
+                    )
                   : null}
                 {addingConv ? (
                   <NewConversationForm
