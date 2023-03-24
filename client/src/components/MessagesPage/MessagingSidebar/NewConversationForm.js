@@ -117,7 +117,7 @@ function NewConversationForm({ allUsers, handleAddConv, setAddingConv }) {
     <div className="relative ml-auto mr-auto w-10/12 rounded-lg border bg-white p-2">
       <span
         onClick={() => setAddingConv(false)}
-        className="absolute top-0 right-0 mt-1 mr-2 cursor-pointer rounded-full border px-1 font-bold text-indigo-500 hover:bg-indigo-700 hover:text-white"
+        className="absolute top-0 right-0 mt-1 mr-2 cursor-pointer rounded-full border px-1 font-bold text-indigo-500 hover:bg-indigo-500 hover:text-white"
       >
         X
       </span>
