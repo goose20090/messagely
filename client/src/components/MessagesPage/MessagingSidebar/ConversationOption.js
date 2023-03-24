@@ -50,11 +50,28 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
   }, [isEditing]);
 
 
-  function handleInputEditSubmit(e){
+  function handleSubmit(e){
     e.preventDefault()
     setTitleMaster(title)
     setIsEditing(false)
+    handleConversationEdit()
   }
+
+  function handleConversationEdit(){
+    fetch(`/conversations/${conversation.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+      }),
+    })
+      .then((r) => r.json())
+      .then((editedConversation) =>console.log(editedConversation));
+  }
+
+
 
   function handleBlur(){
     setIsEditing(false);
@@ -74,7 +91,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
       <div className="ml-3 flex flex-grow flex-col cursor-pointer" onClick={handleClick}>
         <div className="text-sm font-medium">
           {isEditing?
-          <form onSubmit={handleInputEditSubmit}>
+          <form onSubmit={handleSubmit}>
             <input ref = {titleInputRef} value={title} onBlur= {handleBlur}onChange ={(e)=> setTitle(e.target.value)} className=" text-indigo-500"/>
           </form>:
           <span>{titleMaster}</span>}
