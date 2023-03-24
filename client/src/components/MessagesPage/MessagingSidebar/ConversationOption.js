@@ -21,7 +21,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
     handleChangeCurrentConvo(conversation);
   }
 
-  function handleDelete(e) {
+  function handleDeleteClick() {
     setIsModalOpen(true);
   }
 
@@ -45,7 +45,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
         </>
       ),
       action: () => {
-        handleDelete();
+        handleDeleteClick();
       },
     },
   ];
@@ -55,6 +55,15 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
       titleInputRef.current.focus();
     }
   }, [isEditing]);
+
+  function handleConversationDelete(){
+    console.log('delete action triggered')
+    fetch(`/conversations/${conversation.id}`, {
+      method: "DELETE"
+    })
+    .then((res)=>res.json())
+    .then((res)=> console.log(res))
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -84,7 +93,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
 
   return (
     <div className="relative flex flex-row items-center p-4">
-      {isModalOpen && <ConfirmationModal open={isModalOpen} setOpen={setIsModalOpen} title = {title} setIsModalOpen = {setIsModalOpen}/>}
+      {isModalOpen && <ConfirmationModal open={isModalOpen} setOpen={setIsModalOpen} title = {title} setIsModalOpen = {setIsModalOpen} handleConversationDelete={handleConversationDelete}/>}
       <div className="absolute right-0 top-0 mr-4 mt-3 text-xs text-gray-500">
         <DropdownMenu items={dropdownItems} />
       </div>

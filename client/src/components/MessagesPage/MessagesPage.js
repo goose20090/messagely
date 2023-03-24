@@ -105,7 +105,7 @@ function MessagesPage({ onLogout }) {
   }
 
   if (!user) return <Redirect to="/" />;
-
+  console.log(user)
   return (
     <div>
       {loading ? (

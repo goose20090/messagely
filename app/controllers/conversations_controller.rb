@@ -24,10 +24,30 @@ rescue_from Conversation::ConversationError, with: :render_unprocessable_entity_
         conversation.update!(conversation_params)
         render json: conversation
     end
+
+    def destroy
+        conversation_user = current_user.conversation_users.find_by(conversation_id: params[:id])
+      
+        current_user.messages.where(conversation_id: params[:id]).update_all(deleted: true)
+
+        conversation_user.update(deleted: true)
+
+        if conversation_user.conversation.conversation_users.all?(&:deleted)
+            conversation_user.conversation.conversation_users.destroy_all
+            conversation_user.conversation.destroy
+        end
+      
+        head :no_content
+    end
+
     private
 
     def find_conversation
         Conversation.find(params[:id])
+    end
+
+    def current_user
+        User.find(session[:user_id])
     end
 
     def conversation_params
