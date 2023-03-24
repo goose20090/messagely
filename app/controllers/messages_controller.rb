@@ -10,9 +10,19 @@ class MessagesController < ApplicationController
         render json: message, message: :created
     end
 
+    def update
+        byebug
+        message = find_message
+        message.update!(message_params)
+        render json: message
+    end
     private
 
+    def find_message
+        Message.find(params[:id])
+    end
+
     def message_params
-        params.permit(:content, :user_id, :conversation_id)
+        params.permit(:content)
     end
 end

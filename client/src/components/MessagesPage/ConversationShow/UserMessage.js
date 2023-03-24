@@ -1,10 +1,14 @@
-import React from "react";
+import React, {useState, useRef, useEffect} from "react";
 import DropdownMenu from "../DropdownMenu";
 import { faPenSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import autosize from "autosize";
 
 function UserMessage({ message }) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [messageContent, setMessageContent] = useState(message.content)
+  const messageInputRef = useRef()
   const dropdownItems = [
     {
       label: (
@@ -14,7 +18,7 @@ function UserMessage({ message }) {
         </>
       ),
       action: () => {
-        console.log("Option 1 clicked");
+        setIsEditing(true)
       },
     },
     {
@@ -30,6 +34,40 @@ function UserMessage({ message }) {
     },
     // Add more options as needed
   ];
+
+  useEffect(() => {
+    if (isEditing) {
+      messageInputRef.current.focus()
+      autosize(messageInputRef.current)
+    }
+  }, [isEditing])
+
+  function handleMessageInputChange(e){
+    setMessageContent(e.target.value)
+  }
+
+  function handleKeyDown(e){
+    if (e.key === "Enter" && !e.shiftKey){
+      e.preventDefault()
+      handleSubmit()
+    }
+  }
+  function handleSubmit(){
+    setIsEditing(false)
+
+    fetch(`/messages/${message.id}`,{
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        content: messageContent
+      })
+    })
+    .then((r)=> r.json())
+    .then((r)=> console.log(r))
+  }
+
   return (
     <div className="col-start-6 col-end-13 rounded-lg p-3">
       <div className="flex flex-row-reverse items-center justify-start">
@@ -40,7 +78,20 @@ function UserMessage({ message }) {
           <div className="absolute top-0 right-0 mr-1">
             <DropdownMenu items={dropdownItems} />
           </div>
-          <div>{message.content}</div>
+          <div>
+            {isEditing ? (
+                <textarea
+                  className=" text-xs"
+                  value={messageContent}
+                  onChange={handleMessageInputChange}
+                  ref={messageInputRef}
+                  onBlur={() => setIsEditing(false)}
+                  onKeyDown = {handleKeyDown}
+                />
+            ) : (
+              <span>{messageContent}</span>
+            )}
+          </div>
         </div>
       </div>
     </div>
