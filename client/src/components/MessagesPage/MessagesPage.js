@@ -48,7 +48,7 @@ function MessagesPage({ onLogout }) {
   useEffect(() => {
     if (user) {
       setUserConvos(nonDeletedConvos);
-      setUnreadCount(user.unread_message_count)
+      setUnreadCount(user.total_unread_message_count)
       setCurrentConv(false);
       setLoading(false);
       fetch("/users")

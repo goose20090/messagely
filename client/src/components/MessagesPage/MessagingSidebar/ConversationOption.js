@@ -134,9 +134,11 @@ function ConversationOption({ handleChangeCurrentConvo, conversation, handleConv
         </div>
       </div>
       <div className="ml-2 mb-1 flex-shrink-0 self-end">
+      {conversation.unread_messages_count > 0?
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-          3
+           {conversation.unread_messages_count}
         </span>
+        : null}
       </div>
     </div>
   );
