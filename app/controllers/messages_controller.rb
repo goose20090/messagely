@@ -6,9 +6,12 @@ class MessagesController < ApplicationController
     end
 
     def create
-        message = Message.create!(message_params)
+        message = Message.new(message_params)
+        message.read = false
+        message.save!
         render json: message, message: :created
     end
+
 
     def update
         message = find_message
@@ -25,6 +28,6 @@ class MessagesController < ApplicationController
     end
 
     def message_params
-        params.permit(:content, :user_id, :conversation_id, :deleted)
+        params.permit(:content, :user_id, :conversation_id, :deleted).merge(read: false)
     end
 end

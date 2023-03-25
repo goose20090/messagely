@@ -57,8 +57,12 @@ function MessagesPage({ onLogout }) {
     }
   }, []);
 
-  function handleChangeCurrentConvo(convo) {
-    setCurrentConv(convo);
+  function handleChangeCurrentConvo(conv) {
+    setCurrentConv(conv);
+  }
+
+  function updateTotalUnreadCount(convUnreadCount){ 
+    setUnreadCount(unreadCount - convUnreadCount)
   }
 
   function handleAddConv(newConv) {
@@ -156,6 +160,7 @@ function MessagesPage({ onLogout }) {
                             conversation={conversation}
                             handleChangeCurrentConvo={handleChangeCurrentConvo}
                             handleConversationDelete={handleConversationDelete}
+                            updateTotalUnreadCount={updateTotalUnreadCount}
                           />
                         );
                     })

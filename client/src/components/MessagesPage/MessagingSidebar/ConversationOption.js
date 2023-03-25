@@ -7,18 +7,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "../ConfirmationModal";
 
-function ConversationOption({ handleChangeCurrentConvo, conversation, handleConversationDelete }) {
+function ConversationOption({ handleChangeCurrentConvo, conversation, handleConversationDelete, updateTotalUnreadCount}) {
   const { messages } = conversation;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [titleMaster, setTitleMaster] = useState(conversation.title);
   const [title, setTitle] = useState(conversation.title);
   const titleInputRef = useRef();
+  const [unreadCount, setUnreadCount]= useState(conversation.unread_messages_count)
 
   const lastMessage = messages.slice(-1)[0];
 
-  function handleConversationClick(e) {
+  function handleConversationClick() {
     handleChangeCurrentConvo(conversation);
+
+    if (unreadCount> 0){
+    fetch(`/conversations/${conversation.id}/update_unread`, {
+      method: 'PATCH',
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((res)=> res.json())
+    .then((res)=> {
+      setUnreadCount(0)
+      updateTotalUnreadCount(unreadCount)
+    })}
   }
 
   function handleDeleteClick() {
@@ -134,9 +147,9 @@ function ConversationOption({ handleChangeCurrentConvo, conversation, handleConv
         </div>
       </div>
       <div className="ml-2 mb-1 flex-shrink-0 self-end">
-      {conversation.unread_messages_count > 0?
+      {unreadCount > 0?
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-           {conversation.unread_messages_count}
+           {unreadCount}
         </span>
         : null}
       </div>

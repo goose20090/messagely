@@ -12,17 +12,26 @@ rescue_from Conversation::ConversationError, with: :render_unprocessable_entity_
     def create
         conversation = Conversation.new(title: params[:title])
         params[:new_conv_user_ids].each do |user_obj|
-            user = User.find(user_obj[:id])
-            conversation.users << user
+          user = User.find(user_obj[:id])
+          conversation.users << user
         end
         conversation.save!
-        render json: conversation, conversation: :created
-    end
+        render json: conversation, include: ['messages', 'messages.user', 'users'], 
+          serializer: ConversationSerializer, status: :created, 
+          meta: { total_unread_message_count: current_user.total_unread_message_count }
+      end
 
     def update
         conversation = find_conversation
         conversation.update!(conversation_params)
         render json: conversation
+    end
+
+    def update_unread
+        conversation = find_conversation
+        current_user_messages = conversation.messages.where.not(user_id: current_user.id)
+        current_user_messages.update_all(read: true)
+        render json: conversation, include: ['messages', 'messages.user', 'users']
     end
 
     def destroy

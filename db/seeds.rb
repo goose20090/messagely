@@ -7,7 +7,7 @@ Message.destroy_all
 ConversationUser.destroy_all
 
 # Create 10 users
-10.times do
+5.times do
   User.create(
     username: Faker::Internet.unique.username,
     password: 'abc',
