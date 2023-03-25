@@ -54,7 +54,6 @@ function Login({
       },
       body: JSON.stringify(formData),
     }).then((r) => {
-      console.log(r);
       if (r.ok) {
         r.json().then((user) => {
           onLogin(user);
@@ -62,7 +61,6 @@ function Login({
         });
       } else {
         r.json().then((errorData) => {
-          console.log(errorData.error);
           setLoginErrors(errorData);
           setLoading(false);
         });

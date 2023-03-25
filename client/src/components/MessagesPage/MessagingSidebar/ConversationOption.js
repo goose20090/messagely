@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "../ConfirmationModal";
 
-function ConversationOption({ handleChangeCurrentConvo, conversation }) {
+function ConversationOption({ handleChangeCurrentConvo, conversation, handleConversationDelete }) {
   const { messages } = conversation;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -17,7 +17,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
 
   const lastMessage = messages.slice(-1)[0];
 
-  function handleClick(e) {
+  function handleConversationClick(e) {
     handleChangeCurrentConvo(conversation);
   }
 
@@ -56,16 +56,17 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
     }
   }, [isEditing]);
 
-  function handleConversationDelete(){
+  function handleModalDeleteClick(){
     console.log('delete action triggered')
     fetch(`/conversations/${conversation.id}`, {
       method: "DELETE"
     })
-    .then((res)=>res.json())
-    .then((res)=> console.log(res))
+    .then((res)=> {
+      handleConversationDelete(conversation);
+    })
   }
 
-  function handleSubmit(e) {
+  function handleEditSubmit(e) {
     e.preventDefault();
     setTitleMaster(title);
     setIsEditing(false);
@@ -93,7 +94,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
 
   return (
     <div className="relative flex flex-row items-center p-4">
-      {isModalOpen && <ConfirmationModal open={isModalOpen} setOpen={setIsModalOpen} title = {title} setIsModalOpen = {setIsModalOpen} handleConversationDelete={handleConversationDelete}/>}
+      {isModalOpen && <ConfirmationModal open={isModalOpen} setOpen={setIsModalOpen} title = {title} setIsModalOpen = {setIsModalOpen} handleModalDeleteClick={handleModalDeleteClick}/>}
       <div className="absolute right-0 top-0 mr-4 mt-3 text-xs text-gray-500">
         <DropdownMenu items={dropdownItems} />
       </div>
@@ -104,11 +105,11 @@ function ConversationOption({ handleChangeCurrentConvo, conversation }) {
       </div>
       <div
         className="ml-3 flex flex-grow cursor-pointer flex-col"
-        onClick={handleClick}
+        onClick={handleConversationClick}
       >
         <div className="text-sm font-medium">
           {isEditing ? (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleEditSubmit}>
               <input
                 ref={titleInputRef}
                 value={title}

@@ -31,9 +31,9 @@ function MessagesPage({ onLogout }) {
 
   const { conversations } = user;
 
-  let nonDeletedConvos
-  if (conversations){
-  nonDeletedConvos = conversations.filter((convo)=> !convo.deleted)
+  let nonDeletedConvos;
+  if (conversations) {
+    nonDeletedConvos = conversations.filter((convo) => !convo.deleted);
   }
   const [userConvos, setUserConvos] = useState([]);
 
@@ -65,7 +65,7 @@ function MessagesPage({ onLogout }) {
   }
 
   function handleMessageMutation(mutatedMessage) {
-    console.log(mutatedMessage)
+    console.log(mutatedMessage);
     const newConversations = user.conversations.map((conversation) => {
       if (conversation.id === mutatedMessage.conversation_id) {
         return {
@@ -107,8 +107,29 @@ function MessagesPage({ onLogout }) {
     setUserConvos(newConversations);
   }
 
+  function handleConversationDelete(deletedConv) {
+    const updatedConvos = userConvos.map((userConvo) => {
+      if (userConvo.id === deletedConv.id) {
+        return { ...userConvo, deleted: true };
+      } else {
+        return userConvo;
+      }
+    });
+  
+    const nonDeletedConvos = updatedConvos.filter((convo) => !convo.deleted);
+  
+    setUserConvos(nonDeletedConvos);
+    setUser({...user,conversations: nonDeletedConvos});
+  
+    if (nonDeletedConvos.length > 0) {
+      setCurrentConv(nonDeletedConvos[0]);
+    } else {
+      setCurrentConv(false);
+    }
+  }
+
   if (!user) return <Redirect to="/" />;
-  console.log(userConvos)
+
   return (
     <div>
       {loading ? (
@@ -121,15 +142,18 @@ function MessagesPage({ onLogout }) {
               <ConversationList>
                 {userConvos
                   ? userConvos.map((conversation) => {
-                    if (conversation.deleted){
-                      return null}
-                    else return (
-                    <ConversationOption
-                        key={conversation.id}
-                        conversation={conversation}
-                        handleChangeCurrentConvo={handleChangeCurrentConvo}
-                      />)}
-                    )
+                      if (conversation.deleted) {
+                        return null;
+                      } else
+                        return (
+                          <ConversationOption
+                            key={conversation.id}
+                            conversation={conversation}
+                            handleChangeCurrentConvo={handleChangeCurrentConvo}
+                            handleConversationDelete={handleConversationDelete}
+                          />
+                        );
+                    })
                   : null}
                 {addingConv ? (
                   <NewConversationForm
