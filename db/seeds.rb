@@ -34,7 +34,7 @@ end
   3.times do
     message = Message.create(
       content: Faker::Lorem.sentence(word_count: 5),
-      read: true,
+      read: false,
       deleted: false,
       user: users.sample,
       conversation: conversation

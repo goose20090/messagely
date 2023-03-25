@@ -1,5 +1,5 @@
 /** @format */
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Redirect } from "react-router-dom";
 // ConversationShow components
 import ConversationShow from "./ConversationShow/ConversationShow";
@@ -26,6 +26,8 @@ function MessagesPage({ onLogout }) {
 
   const [addingConv, setAddingConv] = useState(false);
 
+  const [unreadCount, setUnreadCount] = useState(0)
+
   // User context object
   const { user, setUser } = useContext(UserContext);
 
@@ -41,10 +43,13 @@ function MessagesPage({ onLogout }) {
 
   const [currentConv, setCurrentConv] = useState({});
 
+  console.log(user)
+
   useEffect(() => {
     if (user) {
       setUserConvos(nonDeletedConvos);
-      setCurrentConv(nonDeletedConvos[0]);
+      setUnreadCount(user.unread_message_count)
+      setCurrentConv(false);
       setLoading(false);
       fetch("/users")
         .then((res) => res.json())
@@ -137,7 +142,7 @@ function MessagesPage({ onLogout }) {
       ) : (
         <div className="flex h-screen flex-row text-gray-800 antialiased">
           <MessagingSidebar>
-            <Search user={user} />
+            <Search user={user} unreadCount = {unreadCount}/>
             <ConversationsContainer>
               <ConversationList>
                 {userConvos

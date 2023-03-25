@@ -6,6 +6,6 @@ class ConversationSerializer < ActiveModel::Serializer
   has_many :users, through: :conversation_users
 
   def deleted
-    object.deleted_by_user?(scope)
+    self.object.deleted_by_user?(scope)
   end
 end

@@ -5,7 +5,7 @@ import SearchInput from "./SearchInput";
 import SidebarTitle from "./SidebarTitle";
 
 
-function Search({ user }) {
+function Search({ user, unreadCount }) {
   const [searching, setSearching] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -25,7 +25,7 @@ function Search({ user }) {
   return (
     <div className="flex justify-start border-b border-indigo-600 pb-2 h-min-20 ">
       {searching ? null : (
-       <SidebarTitle user = {user}/>
+       <SidebarTitle user = {user} unreadCount = {unreadCount}/>
       )}
       <SearchInput handleBlur={handleBlur} handleFocus = {handleFocus} isFocused = {isFocused}/>
     </div>

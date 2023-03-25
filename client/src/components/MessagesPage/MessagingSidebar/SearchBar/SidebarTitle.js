@@ -1,13 +1,14 @@
 import React from "react";
 import UnreadNot from "./UnreadNot";
 
-function SidebarTitle({user}){
+function SidebarTitle({user, unreadCount}){
+  console.log(unreadCount)
     return(
         <div className="flex w-64 justify-start overflow-hidden rounded-lg bg-gray-100  transition-opacity duration-500">
         <div className="w-40 flex-col text-lg font-semibold">
           {user.username}'s Messages
         </div>
-        <UnreadNot num={5} />
+        {unreadCount > 0? <UnreadNot num={unreadCount} />: null}
       </div>
     )
 }

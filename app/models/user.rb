@@ -7,4 +7,8 @@ class User < ApplicationRecord
     validates :username, presence: true
 
     has_secure_password
+
+    def unread_message_count
+        Message.where(conversation_id: self.conversation_ids, read: false).where.not(user_id: self.id).count
+    end
 end
