@@ -113,6 +113,11 @@ function MessagesPage({ onLogout }) {
       } else return conversation;
     });
 
+    setUser({
+      ...user,
+      conversations: newConversations
+    })
+
     setUserConvos(newConversations);
   }
 
