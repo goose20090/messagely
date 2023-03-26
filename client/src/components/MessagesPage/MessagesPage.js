@@ -47,7 +47,7 @@ function MessagesPage({ onLogout }) {
 
   useEffect(() => {
     if (user) {
-      setUserConvos(nonDeletedConvos);
+      setUserConvos(sortConversationsByUpdatedAt(nonDeletedConvos));
       setUnreadCount(user.total_unread_message_count)
       setCurrentConv(false);
       setLoading(false);
@@ -66,10 +66,19 @@ function MessagesPage({ onLogout }) {
   }
 
   function handleAddConv(newConv) {
-    setUserConvos([...conversations, newConv]);
+    setUserConvos([newConv, ...conversations]);
     setUser({
       ...user,
-      conversations: [...conversations, newConv],
+      conversations: [newConv, ...conversations],
+    });
+  }
+
+  function sortConversationsByUpdatedAt(conversations) {
+    return conversations.sort((a, b) => {
+      const dateA = new Date(a.updated_at);
+      const dateB = new Date(b.updated_at);
+  
+      return dateB - dateA;
     });
   }
 
@@ -109,16 +118,19 @@ function MessagesPage({ onLogout }) {
         return {
           ...conversation,
           messages: [...currentConv.messages, addedMessage],
+          updated_at: Date.now()
         };
       } else return conversation;
     });
 
+    const convosSortedByDate = sortConversationsByUpdatedAt(newConversations)
+
     setUser({
       ...user,
-      conversations: newConversations
+      conversations: convosSortedByDate
     })
 
-    setUserConvos(newConversations);
+    setUserConvos(convosSortedByDate);
   }
 
   function handleConversationDelete(deletedConv) {
