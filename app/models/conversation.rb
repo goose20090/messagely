@@ -1,10 +1,5 @@
 class Conversation < ApplicationRecord
     class ConversationError < StandardError
-        attr_reader :record
-    
-        def initialize(record)
-          @record = record
-        end
       end   
     has_many :conversation_users
     has_many :users, through: :conversation_users
@@ -27,6 +22,4 @@ class Conversation < ApplicationRecord
             raise ConversationError, self
         end
     end
-
-
 end

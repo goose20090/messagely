@@ -173,7 +173,7 @@ function ConversationOption({ handleChangeCurrentConvo, conversation, handleConv
         
         {lastMessage
           ? lastMessage.deleted
-            ?<span className="italic"> message deleted</span>
+            ?<span className="italic"> Message Deleted</span>
             : lastMessage.content
           :<span className="italic float-left"> No messages yet </span>}
       </div>

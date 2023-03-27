@@ -7,6 +7,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import autosize from "autosize";
 import DeletedMessage from "./DeletedMessage";
+import { useDatify } from "../../../utilities/useDatify";
 
 function UserMessage({ message, handleMessageMutation }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -94,22 +95,6 @@ function UserMessage({ message, handleMessageMutation }) {
     setMessageContent(messageContentMaster)
   }
 
-  let formattedDate
-
-  function formatDate(date){
-
-    const createdDate = new Date(date);
-    const todayDate = new Date();
-    if (createdDate.toDateString() === todayDate.toDateString()) {
-        formattedDate = `${createdDate.getHours()}:${createdDate.getMinutes()}`;
-    } else {
-        formattedDate = `${createdDate.getDate()}/${createdDate.getMonth() + 1}/${createdDate.getFullYear()}`;
-    }
-
-    return formattedDate
-}
-
-formatDate(message.created_at)
 
   return (
 <div className="col-start-6 col-end-13 rounded-lg p-3">
@@ -144,7 +129,7 @@ formatDate(message.created_at)
     </div>
   )}
   <div className="w-full flex justify-end">
-    <span className="text-xs italic">{formattedDate}</span>
+    <span className="text-xs italic">{useDatify(message.created_at)}</span>
   </div>
 </div>
 );

@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :username, :password, :password_confirmation, :avatar_url, :total_unread_message_count
+  attributes :id, :username, :password, :password_confirmation, :total_unread_message_count
 
   has_many :conversation_users
   has_many :messages

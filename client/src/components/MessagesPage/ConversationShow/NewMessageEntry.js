@@ -1,15 +1,11 @@
 /** @format */
 
 import React, { useState } from "react";
-import { useContext } from "react";
-import { UserContext } from "../../../context/user";
 
 function NewMessageEntry({currentConv, user, handleAddMessage}) {
 
 
   const [message, setMessage] = useState('')
-
-  const {setUser} = useContext(UserContext);
 
   function handleChange(e){
     setMessage(e.target.value)

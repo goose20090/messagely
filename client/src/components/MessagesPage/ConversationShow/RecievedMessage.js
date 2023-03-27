@@ -1,25 +1,11 @@
 /** @format */
 
 import React from "react";
+import { useDatify } from "../../../utilities/useDatify";
 import DeletedMessage from "./DeletedMessage";
 
 function ReceivedMessage({ message }) {
-  let formattedDate;
 
-  function formatDate(date) {
-    const createdDate = new Date(date);
-    const todayDate = new Date();
-    if (createdDate.toDateString() === todayDate.toDateString()) {
-      formattedDate = `${createdDate.getHours()}:${createdDate.getMinutes()}`;
-    } else {
-      formattedDate = `${createdDate.getDate()}/${
-        createdDate.getMonth() + 1
-      }/${createdDate.getFullYear()}`;
-    }
-
-    return formattedDate;
-  }
-  formattedDate = (formatDate(message.created_at))
   return (
     <div className="col-start-1 col-end-8 rounded-lg p-3">
       {message.deleted ? (
@@ -37,7 +23,7 @@ function ReceivedMessage({ message }) {
         </div>
       )}
       <div className="flex w-full justify-start">
-        <span className={`text-xs italic`}>{formattedDate}</span>
+        <span className={`text-xs italic`}>{useDatify(message.created_at)}</span>
       </div>
     </div>
   );

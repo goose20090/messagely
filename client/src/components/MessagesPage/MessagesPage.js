@@ -1,5 +1,6 @@
 /** @format */
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
+import useMessagesPage from "./hooks/useMessagesPage";
 import { Redirect } from "react-router-dom";
 // ConversationShow components
 import ConversationShow from "./ConversationShow/ConversationShow";
@@ -17,177 +18,27 @@ import ConversationsContainer from "./MessagingSidebar/ConversationsContainer";
 import NewConversationButton from "./MessagingSidebar/NewConversationButton";
 import Search from "./MessagingSidebar/SearchBar/Search";
 import Loader from "../Auth/Loader";
-import { UserContext } from "../../context/user";
 import NewConversationForm from "./MessagingSidebar/NewConversationForm";
 
 function MessagesPage({ onLogout }) {
-  // Loading boolean states
-  const [loading, setLoading] = useState(true);
-
-  const [addingConv, setAddingConv] = useState(false);
-
-  const [unreadCount, setUnreadCount] = useState(0)
-
-  const [search, setSearch] =useState("")
-
-  const [masterConvs, setMasterConvs] = useState([])
-
-  // User context object
-  const { user, setUser } = useContext(UserContext);
-
-  const { conversations } = user;
-
-  let nonDeletedConvos;
-  let sortedNonDeletedConvos
-
-  if (conversations) {
-    nonDeletedConvos = conversations.filter((convo) => !convo.deleted);
-    sortedNonDeletedConvos = sortConversationsByUpdatedAt(nonDeletedConvos);
-  }
-  const [userConvos, setUserConvos] = useState([]);
-
-  const [allUsers, setAllUsers] = useState([]);
-
-  const [currentConv, setCurrentConv] = useState({});
-
-
-
-
-
-  useEffect(() => {
-    if (user) {
-      setUserConvos(sortedNonDeletedConvos);
-      setMasterConvs(sortedNonDeletedConvos)
-      setUnreadCount(user.total_unread_message_count)
-      setCurrentConv(false);
-      setLoading(false);
-      fetch("/users")
-        .then((res) => res.json())
-        .then((usersData) => setAllUsers(usersData));
-    }
-  }, []);
-
-  function sortConversationsByUpdatedAt(conversations) {
-    return conversations.sort((a, b) => {
-      const dateA = new Date(a.updated_at);
-      const dateB = new Date(b.updated_at);
-  
-      return dateB - dateA;
-    });
-  }
-
-  function handleChangeCurrentConvo(conv) {
-    setCurrentConv(conv);
-  }
-
-  function updateTotalUnreadCount(convUnreadCount){ 
-    setUnreadCount(unreadCount - convUnreadCount)
-  }
-
-  function handleAddConv(newConv) {
-    setUserConvos([newConv, ...conversations]);
-    setMasterConvs([newConv, ...conversations])
-    setUser({
-      ...user,
-      conversations: [newConv, ...conversations],
-    });
-  }
-
- 
-
-  function handleMessageMutation(mutatedMessage) {
-    const newConversations = user.conversations.map((conversation) => {
-      if (conversation.id === mutatedMessage.conversation_id) {
-        return {
-          ...conversation,
-          messages: conversation.messages.map((message) => {
-            if (message.id === mutatedMessage.id) {
-              return mutatedMessage;
-            } else {
-              return message;
-            }
-          }),
-        };
-      } else {
-        return conversation;
-      }
-    });
-
-    setUser({
-      ...user,
-      conversations: newConversations,
-    });
-    setUserConvos(newConversations);
-    setMasterConvs(newConversations)
-  }
-
-  function handleAddMessage(addedMessage) {
-    setCurrentConv({
-      ...currentConv,
-      messages: [...currentConv.messages, addedMessage],
-    });
-    const newConversations = user.conversations.map((conversation) => {
-      if (conversation.id === currentConv.id) {
-        return {
-          ...conversation,
-          messages: [...currentConv.messages, addedMessage],
-          updated_at: Date.now()
-        };
-      } else return conversation;
-    });
-
-    const convosSortedByDate = sortConversationsByUpdatedAt(newConversations)
-
-    setUser({
-      ...user,
-      conversations: convosSortedByDate
-    })
-
-    setUserConvos(convosSortedByDate);
-    setMasterConvs(convosSortedByDate);
-  }
-
-  function handleConversationDelete(deletedConv) {
-    const updatedConvos = userConvos.map((userConvo) => {
-      if (userConvo.id === deletedConv.id) {
-        return { ...userConvo, deleted: true };
-      } else {
-        return userConvo;
-      }
-    });
-  
-    const newNonDeletedConvos = updatedConvos.filter((convo) => !convo.deleted);
-  
-    setUserConvos(newNonDeletedConvos);
-    setMasterConvs(newNonDeletedConvos)
-    setUser({...user,conversations: newNonDeletedConvos});
-  
-    if (nonDeletedConvos.length > 0) {
-      setCurrentConv(nonDeletedConvos[0]);
-    } else {
-      setCurrentConv(false);
-    }
-  }
-
-  function handleSearchChange(e){
-    setSearch(e.target.value)
-    setUserConvos(filterConversationsByUsername([...masterConvs], e.target.value))
-
-  }
-
-  function filterConversationsByUsername(conversations, searchValue) {
-    if (!searchValue) return sortConversationsByUpdatedAt(nonDeletedConvos);
-
-
-    return conversations.filter((conversation) => {
-      const users = conversation.users;
-      return users.some((user) =>
-        user.username.toLowerCase().includes(searchValue.toLowerCase())
-      );
-    });
-  }
-
-
+    const {
+    loading,
+    addingConv,
+    setAddingConv,
+    search,
+    userConvos,
+    allUsers,
+    currentConv,
+    handleChangeCurrentConvo,
+    handleAddConv,
+    handleMessageMutation,
+    handleAddMessage,
+    handleConversationDelete,
+    handleSearchChange,
+    unreadCount,
+    updateTotalUnreadCount,
+    user
+    } = useMessagesPage();
   if (!user) return <Redirect to="/" />;
 
   return (
@@ -197,7 +48,12 @@ function MessagesPage({ onLogout }) {
       ) : (
         <div className="flex h-screen flex-row text-gray-800 antialiased">
           <MessagingSidebar>
-            <Search user={user} unreadCount = {unreadCount} search={search} handleSearchChange={handleSearchChange}/>
+            <Search
+              user={user}
+              unreadCount={unreadCount}
+              search={search}
+              handleSearchChange={handleSearchChange}
+            />
             <ConversationsContainer>
               <ConversationList>
                 {userConvos
