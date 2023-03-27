@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import './App.css';
 import Login from "./components/Auth/Login"
 import { UserContext } from './context/user';
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import Signup from "./components/Auth/Signup";
 import MessagesPage from "./components/MessagesPage/MessagesPage";
 import Loader from './components/Auth/Loader';

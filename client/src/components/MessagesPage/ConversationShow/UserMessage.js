@@ -94,40 +94,60 @@ function UserMessage({ message, handleMessageMutation }) {
     setMessageContent(messageContentMaster)
   }
 
+  let formattedDate
+
+  function formatDate(date){
+
+    const createdDate = new Date(date);
+    const todayDate = new Date();
+    if (createdDate.toDateString() === todayDate.toDateString()) {
+        formattedDate = `${createdDate.getHours()}:${createdDate.getMinutes()}`;
+    } else {
+        formattedDate = `${createdDate.getDate()}/${createdDate.getMonth() + 1}/${createdDate.getFullYear()}`;
+    }
+
+    return formattedDate
+}
+
+formatDate(message.created_at)
+
   return (
-    <div className="col-start-6 col-end-13 rounded-lg p-3">
-      {isDeleted || message.deleted ? (
-        <div className="flex flex-row-reverse items-center justify-start">
-          <DeletedMessage />
-        </div>
-      ) : (
-        <div className="flex flex-row-reverse items-center justify-start">
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-            {message.user.username[0].toUpperCase()}
-          </div>
-          <div className="relative mr-3 rounded-xl bg-indigo-100 py-3 px-4 text-sm shadow">
-            <div className="absolute top-0 right-0 mr-1">
-              <DropdownMenu items={dropdownItems} />
-            </div>
-            <div>
-              {isEditing ? (
-                <textarea
-                  className=" text-xs"
-                  value={messageContent}
-                  onChange={handleMessageInputChange}
-                  ref={messageInputRef}
-                  onBlur={handleBlur}
-                  onKeyDown={handleKeyDown}
-                />
-              ) : (
-                <span>{messageContentMaster}</span>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+<div className="col-start-6 col-end-13 rounded-lg p-3">
+  {isDeleted || message.deleted ? (
+    <div className="flex flex-row-reverse items-center justify-start">
+      <DeletedMessage />
     </div>
-  );
+  ) : (
+    <div className="flex flex-row-reverse items-center justify-start">
+      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
+        {message.user.username[0].toUpperCase()}
+      </div>
+      <div className="relative mr-3 rounded-xl bg-indigo-100 py-3 px-4 text-sm shadow">
+        <div className="absolute top-0 right-0 mr-1">
+          <DropdownMenu items={dropdownItems} />
+        </div>
+        <div>
+          {isEditing ? (
+            <textarea
+              className=" text-xs"
+              value={messageContent}
+              onChange={handleMessageInputChange}
+              ref={messageInputRef}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+            />
+          ) : (
+            <span>{messageContentMaster}</span>
+          )}
+        </div>
+      </div>
+    </div>
+  )}
+  <div className="w-full flex justify-end">
+    <span className="text-xs italic">{formattedDate}</span>
+  </div>
+</div>
+);
 }
 
 export default UserMessage;

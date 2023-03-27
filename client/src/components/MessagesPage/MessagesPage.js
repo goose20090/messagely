@@ -43,7 +43,6 @@ function MessagesPage({ onLogout }) {
 
   const [currentConv, setCurrentConv] = useState({});
 
-  console.log(user)
 
   useEffect(() => {
     if (user) {
@@ -60,6 +59,7 @@ function MessagesPage({ onLogout }) {
   function handleChangeCurrentConvo(conv) {
     setCurrentConv(conv);
   }
+  console.log(allUsers)
 
   function updateTotalUnreadCount(convUnreadCount){ 
     setUnreadCount(unreadCount - convUnreadCount)
