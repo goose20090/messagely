@@ -3,6 +3,8 @@ class User < ApplicationRecord
     has_many :conversation_users
     has_many :conversations, through: :conversation_users
 
+    attr_accessor :remember_me
+
     validates :username, uniqueness: true
     validates :username, presence: true
 

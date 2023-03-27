@@ -15,6 +15,7 @@ before_action :authorize, only: [:show]
 
     def create
         user = User.create!(user_params)
+        byebug
         if params[:remember_me]
             session[:user_id] = user.id
         end
