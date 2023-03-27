@@ -33,6 +33,8 @@ function NewMessageEntry({currentConv, user, handleAddMessage}) {
   }  
   
   return (
+    <div>
+      {/* <p>Errors</p> */}
     <div className="flex flex-row items-center">
       <div className="flex h-12 w-full flex-row items-center rounded-3xl border px-2">
         <form className="flex w-full" onSubmit = {handleSubmit}>
@@ -62,6 +64,7 @@ function NewMessageEntry({currentConv, user, handleAddMessage}) {
         </form>
       </div>
       <div className="ml-6"></div>
+    </div>
     </div>
   );
 }

@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   
   resources :conversations
-  resources :messages
-  resources :users
+  resources :messages, only: [:index, :create, :update]
+  resources :users, only: [:index]
+  
+
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
   get "/me", to: "users#show"

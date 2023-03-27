@@ -37,7 +37,7 @@ rescue_from Conversation::ConversationError, with: :render_unprocessable_entity_
     def destroy
         conversation_user = current_user.conversation_users.find_by(conversation_id: params[:id])
       
-        current_user.messages.where(conversation_id: params[:id]).update_all(deleted: true)
+        current_user.messages.where(conversation_id: params[:id]).update_all(deleted: true, content: nil)
 
         conversation_user.update(deleted: true)
 
