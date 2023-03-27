@@ -1,5 +1,5 @@
 /** @format */
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 // ConversationShow components
 import ConversationShow from "./ConversationShow/ConversationShow";
@@ -28,14 +28,21 @@ function MessagesPage({ onLogout }) {
 
   const [unreadCount, setUnreadCount] = useState(0)
 
+  const [search, setSearch] =useState("")
+
+  const [masterConvs, setMasterConvs] = useState([])
+
   // User context object
   const { user, setUser } = useContext(UserContext);
 
   const { conversations } = user;
 
   let nonDeletedConvos;
+  let sortedNonDeletedConvos
+
   if (conversations) {
     nonDeletedConvos = conversations.filter((convo) => !convo.deleted);
+    sortedNonDeletedConvos = sortConversationsByUpdatedAt(nonDeletedConvos);
   }
   const [userConvos, setUserConvos] = useState([]);
 
@@ -44,9 +51,13 @@ function MessagesPage({ onLogout }) {
   const [currentConv, setCurrentConv] = useState({});
 
 
+
+
+
   useEffect(() => {
     if (user) {
-      setUserConvos(sortConversationsByUpdatedAt(nonDeletedConvos));
+      setUserConvos(sortedNonDeletedConvos);
+      setMasterConvs(sortedNonDeletedConvos)
       setUnreadCount(user.total_unread_message_count)
       setCurrentConv(false);
       setLoading(false);
@@ -55,23 +66,6 @@ function MessagesPage({ onLogout }) {
         .then((usersData) => setAllUsers(usersData));
     }
   }, []);
-
-  function handleChangeCurrentConvo(conv) {
-    setCurrentConv(conv);
-  }
-  console.log(allUsers)
-
-  function updateTotalUnreadCount(convUnreadCount){ 
-    setUnreadCount(unreadCount - convUnreadCount)
-  }
-
-  function handleAddConv(newConv) {
-    setUserConvos([newConv, ...conversations]);
-    setUser({
-      ...user,
-      conversations: [newConv, ...conversations],
-    });
-  }
 
   function sortConversationsByUpdatedAt(conversations) {
     return conversations.sort((a, b) => {
@@ -82,8 +76,26 @@ function MessagesPage({ onLogout }) {
     });
   }
 
+  function handleChangeCurrentConvo(conv) {
+    setCurrentConv(conv);
+  }
+
+  function updateTotalUnreadCount(convUnreadCount){ 
+    setUnreadCount(unreadCount - convUnreadCount)
+  }
+
+  function handleAddConv(newConv) {
+    setUserConvos([newConv, ...conversations]);
+    setMasterConvs([newConv, ...conversations])
+    setUser({
+      ...user,
+      conversations: [newConv, ...conversations],
+    });
+  }
+
+ 
+
   function handleMessageMutation(mutatedMessage) {
-    console.log(mutatedMessage);
     const newConversations = user.conversations.map((conversation) => {
       if (conversation.id === mutatedMessage.conversation_id) {
         return {
@@ -106,6 +118,7 @@ function MessagesPage({ onLogout }) {
       conversations: newConversations,
     });
     setUserConvos(newConversations);
+    setMasterConvs(newConversations)
   }
 
   function handleAddMessage(addedMessage) {
@@ -131,6 +144,7 @@ function MessagesPage({ onLogout }) {
     })
 
     setUserConvos(convosSortedByDate);
+    setMasterConvs(convosSortedByDate);
   }
 
   function handleConversationDelete(deletedConv) {
@@ -142,10 +156,11 @@ function MessagesPage({ onLogout }) {
       }
     });
   
-    const nonDeletedConvos = updatedConvos.filter((convo) => !convo.deleted);
+    const newNonDeletedConvos = updatedConvos.filter((convo) => !convo.deleted);
   
-    setUserConvos(nonDeletedConvos);
-    setUser({...user,conversations: nonDeletedConvos});
+    setUserConvos(newNonDeletedConvos);
+    setMasterConvs(newNonDeletedConvos)
+    setUser({...user,conversations: newNonDeletedConvos});
   
     if (nonDeletedConvos.length > 0) {
       setCurrentConv(nonDeletedConvos[0]);
@@ -153,6 +168,25 @@ function MessagesPage({ onLogout }) {
       setCurrentConv(false);
     }
   }
+
+  function handleSearchChange(e){
+    setSearch(e.target.value)
+    setUserConvos(filterConversationsByUsername([...masterConvs], e.target.value))
+
+  }
+
+  function filterConversationsByUsername(conversations, searchValue) {
+    if (!searchValue) return sortConversationsByUpdatedAt(nonDeletedConvos);
+
+
+    return conversations.filter((conversation) => {
+      const users = conversation.users;
+      return users.some((user) =>
+        user.username.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    });
+  }
+
 
   if (!user) return <Redirect to="/" />;
 
@@ -163,7 +197,7 @@ function MessagesPage({ onLogout }) {
       ) : (
         <div className="flex h-screen flex-row text-gray-800 antialiased">
           <MessagingSidebar>
-            <Search user={user} unreadCount = {unreadCount}/>
+            <Search user={user} unreadCount = {unreadCount} search={search} handleSearchChange={handleSearchChange}/>
             <ConversationsContainer>
               <ConversationList>
                 {userConvos

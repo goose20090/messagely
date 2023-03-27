@@ -2,7 +2,8 @@
 
 import React from "react";
 
-function SearchInput({handleBlur, handleFocus, isFocused}) {
+function SearchInput({handleBlur, handleFocus, isFocused, search, handleSearchChange}) {
+
   return (
     <div className="max-w- mx-auto min-h-50">
     <form action="" className="relative mx-auto w-max">
@@ -10,6 +11,8 @@ function SearchInput({handleBlur, handleFocus, isFocused}) {
         onFocus={handleFocus}
         onBlur={handleBlur}
         type="search"
+        value= {search}
+        onChange= {handleSearchChange}
         className={`focus: peer relative z-10 h-12 w-12 cursor-pointer rounded-full border border-indigo-300 bg-transparent pl-8 outline-none focus:w-full focus:cursor-text focus:pl-16 focus:pr-4 ${
           isFocused ? "transition-all duration-300" : ""
         }`}
