@@ -1,6 +1,4 @@
 class Conversation < ApplicationRecord
-    class ConversationError < StandardError
-      end   
     has_many :conversation_users
     has_many :users, through: :conversation_users
     has_many :messages, dependent: :destroy
@@ -19,7 +17,6 @@ class Conversation < ApplicationRecord
     def must_have_at_least_two_users
         if users.size < 2
             errors.add(:users, message: "At least one recipient required")
-            raise ConversationError, self
         end
     end
 end

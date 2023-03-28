@@ -1,7 +1,5 @@
 class ConversationsController < ApplicationController
 rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
-rescue_from Conversation::ConversationError, with: :render_unprocessable_entity_response
-
 
     def index
         conversations = Conversation.all
