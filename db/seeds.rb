@@ -10,8 +10,7 @@ ConversationUser.destroy_all
 5.times do
   User.create(
     username: Faker::Internet.unique.username,
-    password: 'abc',
-    avatar_url: Faker::Avatar.image
+    password: 'abc'
   )
 end
 
