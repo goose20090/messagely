@@ -83,7 +83,7 @@ When validations fail, error messages will be displayed on the DOM:
 
    - As displayed in the User Experience, failed validations display their errors to the DOM
 
-5) Properly update front end state upon successful response from a POST, PATCH, or DELETE request
+5) *Properly update front end state upon successful response from a POST, PATCH, or DELETE request*
 
     - This app updates its front end via state, rather than successive GET requests 
 
