@@ -115,6 +115,6 @@ When validations fail, error messages will be displayed on the DOM:
 
 - This backend generates placeholder data for the App via use of the [Faker Gem](https://github.com/faker-ruby/faker)
 
-- The buttons, login, sign up delete confirmation modal were styled using Tailwind's [template components](https://tailwindui.com/components)
+- The buttons, login, sign up and delete confirmation modal were styled using Tailwind's [template components](https://tailwindui.com/components)
 
 - The layout for this app is the [Messages UI Layout by iaminos](https://tailwindcomponents.com/component/messages-ui-layout)
