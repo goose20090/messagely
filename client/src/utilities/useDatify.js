@@ -16,6 +16,9 @@ export function useDatify(date){
       if (minutes < 10) {
         minutes = '0' + minutes;
       }
-       return `${createdDate.getDate()}/${month}/${createdDate.getFullYear()} ${createdDate.getHours()}:${minutes}`;
+      if (minutes % 10){
+        minutes = minutes + '0'
+      }
+       return `${createdDate.getDate()}/${month}/${createdDate.getFullYear()}`;
     }
 }

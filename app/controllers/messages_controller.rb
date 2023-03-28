@@ -1,5 +1,5 @@
 class MessagesController < ApplicationController
-
+rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
     def index
         messages = Message.all
         render json: messages
@@ -29,5 +29,9 @@ class MessagesController < ApplicationController
 
     def message_params
         params.permit(:content, :user_id, :conversation_id, :deleted).merge(read: false)
+    end
+
+    def render_unprocessable_entity_response(invalid)
+        render json: {errors: invalid.record.errors.full_messages}, status: :unprocessable_entity
     end
 end

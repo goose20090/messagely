@@ -6,6 +6,7 @@ function NewMessageEntry({currentConv, user, handleAddMessage}) {
 
 
   const [message, setMessage] = useState('')
+  const [errors, setErrors] = useState([])
 
   function handleChange(e){
     setMessage(e.target.value)
@@ -24,17 +25,28 @@ function NewMessageEntry({currentConv, user, handleAddMessage}) {
         conversation_id: currentConv.id
       }),
     })
-    .then((r)=> r.json())
-    .then((returnedMessage)=> {
+    .then((r)=>{
+      if (r.ok){
+        r.json().then((returnedMessage)=> {
       handleAddMessage(returnedMessage)
       setMessage('')
+      setErrors([])
+        })
+      }
+      else {
+        r.json().then((errorData)=> setErrors(errorData.errors))
+      }
+    })
     }
-    )
-  }  
+    
+  
   
   return (
     <div>
-      {/* <p>Errors</p> */}
+      {errors.length > 0 && (
+        errors.map((error)=> 
+        <p className=" ml-4 text-xs italic text-red-500" key={error}>{error}</p>)
+      )}
     <div className="flex flex-row items-center">
       <div className="flex h-12 w-full flex-row items-center rounded-3xl border px-2">
         <form className="flex w-full" onSubmit = {handleSubmit}>
