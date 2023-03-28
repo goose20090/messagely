@@ -21,6 +21,7 @@ import Loader from "../Auth/Loader";
 import NewConversationForm from "./MessagingSidebar/NewConversationForm";
 
 function MessagesPage({ onLogout }) {
+
     const {
     loading,
     addingConv,
@@ -39,8 +40,8 @@ function MessagesPage({ onLogout }) {
     updateTotalUnreadCount,
     user
     } = useMessagesPage();
-  if (!user) return <Redirect to="/" />;
-
+  
+    if (!user) return <Redirect to="/" />;
   return (
     <div>
       {loading ? (

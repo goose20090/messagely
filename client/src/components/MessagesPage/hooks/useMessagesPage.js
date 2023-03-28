@@ -167,7 +167,6 @@ function useMessagesPage() {
     handleConversationDelete,
     handleSearchChange,
     unreadCount,
-    updateTotalUnreadCount
   };
 }
 

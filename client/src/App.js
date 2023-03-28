@@ -15,13 +15,14 @@ function App() {
   const history = useHistory();
 
   useEffect(()=> {
+    setLoading(true)
     fetch("/me").then((r)=>{
       if (r.ok){
         r.json().then((user)=> {
           // console.log(user)
           setUser(user);
           setLoading(false);
-          history.push("/messages")
+          history.push("/messages-page")
         })
       }
       else setLoading(false)
@@ -56,7 +57,7 @@ function App() {
             : 
             <Signup onLogin = {onLogin} setLoading = {setLoading} setSignupErrors = {setSignupErrors} signUpErrors = {signupErrors} setLoginErrors = {setLoginErrors}/>}
           </Route>
-          <Route path = "/messages" >
+          <Route path = "/messages-page" >
           {loading ? <Loader/>
             : <MessagesPage onLogout= {onLogout}/>}
           </Route>

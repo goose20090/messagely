@@ -3,7 +3,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useHistory, Redirect } from "react-router-dom";
-import { useContext } from "react";
+
 
 function Login({
   setLoading,
@@ -57,7 +57,7 @@ function Login({
       if (r.ok) {
         r.json().then((user) => {
           onLogin(user);
-          history.push("/messages");
+          history.push("/messages-page");
         });
       } else {
         r.json().then((errorData) => {
@@ -68,7 +68,7 @@ function Login({
     });
   }
 
-  if (user) return <Redirect to="/messages" />;
+  if (user) return <Redirect to="/messages-page" />;
 
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -77,7 +77,7 @@ function Login({
           <img
             className="mx-auto h-12 w-auto"
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQrj9NjU28zWCx-Cz-GvfjNdOgXa8zKJgdyBsHnFT45zgIdLnO7vZ9Yiwqaw_UeoLeu6Y&usqp=CAU"
-            alt="Your Company"
+            alt="Messagely"
           />
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
             Log in to your account

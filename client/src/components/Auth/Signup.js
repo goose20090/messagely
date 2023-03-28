@@ -55,7 +55,7 @@ function Signup({onLogin, setLoading, signUpErrors, setSignupErrors, setLoginErr
             if (r.ok){
                 r.json().then((user)=> {
                     onLogin(user)
-                    history.push("/messages")
+                    history.push("/messages-page")
                 })
             }
             else {
