@@ -112,19 +112,32 @@ function ConversationOption({ handleChangeCurrentConvo, conversation, handleConv
     const createdDate = new Date(date);
     const todayDate = new Date();
     if (createdDate.toDateString() === todayDate.toDateString()) {
-        formattedDate = `${createdDate.getHours()}:${createdDate.getMinutes()}`;
+      let minutes = createdDate.getMinutes();
+      if (minutes < 10) {
+        minutes = '0' + minutes;
+      }
+      return `${createdDate.getHours()}:${minutes}`;
     } else {
-        formattedDate = `${createdDate.getDate()}/${createdDate.getMonth() + 1}/${createdDate.getFullYear()}`;
+      let month = createdDate.getMonth() + 1;
+      if (month < 10) {
+        month = '0' + month;
+      }
+      let minutes = createdDate.getMinutes();
+      if (minutes < 10) {
+        minutes = '0' + minutes;
+      }
+      if (minutes % 10){
+        minutes = minutes + '0'
+      }
+       return `${createdDate.getDate()}/${month}/${createdDate.getFullYear()}`;
     }
-
-    return formattedDate
 }
 
   if (lastMessage){
-    formatDate(lastMessage.created_at)
+    formattedDate = formatDate(lastMessage.created_at)
   }
   else{
-    formatDate(conversation.created_at)
+    formattedDate = formatDate(conversation.created_at)
   }
 
   return (
