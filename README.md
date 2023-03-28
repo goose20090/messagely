@@ -9,28 +9,51 @@ It was designed partly to fulfil a set of passing criteria for the phase 4 proje
 
 Users can navigate the login via client side routes:
 
+![links clicked to reach the login and signup routes](./gifs/client-side-routing.gif)
+
 They can create an account with with sign up page:
+
+![Sign up form filled and submitted to create a new account](./gifs/sign-up.gif)
 
 That they can use to login:
 
+![newly signed up account used to log in](./gifs/login.gif)
+
 When the 'Remember Me' option is checked, their logged in status will persist:
+
+![Logged in status persists across page refreshes](./gifs/remember-me-checked.gif)
 
 When it isn't, it won't:
 
+![Logged in status doesn't persist](./gifs/remember-me-unchecked.gif)
+
 Users can start conversations with other users:
+
+![New conversation created with button and form](./gifs/starting-a-new-conversations.gif)
 
 In which they can send messages:
 
+![Messages added to conversation by Message entry form/bar](./gifs/sending-messages.gif)
+
 Conversation titles and messages' content can be edited:
+
+![Conversation and messages edited using dropdown menus](./gifs/editing-conversations-and-messages.gif)
 
 And each can be deleted:
 
+![Conversation and messages deleted using same dropdown menus](./gifs/deleting-conversations-and-messages.gif)
+
 However, a user can only delete their own messages (conversations will be fully deleted when all users have deleted the conversation):
+
+![A deleted conversation from the other users's perspective, showing the deleting-users' messages have been deleted, but not their own](./gifs/showing-users-can-only-delete-their-own-messages.gif)
 
 Conversations can also be filtered by their users' usernames:
 
+![The search bar is used to filter conversations](./gifs/filter-conversations.gif)
+
 When validations fail, error messages will be displayed on the DOM:
 
+![Validation error messages displayed for Conversation and Messages](./gifs/displaying-errors-to-the-dom.gif)
 
 
 ## Project Requirements for the Messagely Messaging App
@@ -90,4 +113,8 @@ When validations fail, error messages will be displayed on the DOM:
 
 ## NOTES
 
-   - This backend generates placeholder data for the App via use of the [Faker Gem](https://github.com/faker-ruby/faker)
+- This backend generates placeholder data for the App via use of the [Faker Gem](https://github.com/faker-ruby/faker)
+
+- The buttons, login, sign up delete confirmation modal were styled using Tailwind's [template components](https://tailwindui.com/components)
+
+- The layout for this app is the [Messages UI Layout by iaminos](https://tailwindcomponents.com/component/messages-ui-layout)
