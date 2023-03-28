@@ -46,26 +46,38 @@ function Login({
   function handleSubmit(e) {
     setLoading(true);
     e.preventDefault();
-
+  
     fetch("/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
-    }).then((r) => {
-      if (r.ok) {
-        r.json().then((user) => {
-          onLogin(user);
-          history.push("/messages-page");
-        });
-      } else {
-        r.json().then((errorData) => {
-          setLoginErrors(errorData);
-          setLoading(false);
-        });
-      }
-    });
+    })
+      .then((r) => {
+        if (r.ok) {
+          return r.json().then((user) => {
+            onLogin(user);
+            history.push("/messages-page");
+          });
+        } else {
+          return r.text().then((text) => {
+            try {
+              const errorData = JSON.parse(text);
+              setLoginErrors(errorData);
+            } catch (error) {
+              console.error("Unexpected response from server:", text);
+              setLoginErrors({ message: "An unexpected error occurred." });
+            }
+            setLoading(false);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error during fetch:", error);
+        setLoginErrors({ message: "An error occurred while processing your request." });
+        setLoading(false);
+      });
   }
 
   if (user) return <Redirect to="/messages-page" />;

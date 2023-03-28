@@ -5,6 +5,34 @@ This is a React-based Single Page Application, with a Ruby-on-Rails backend. It 
 It was designed partly to fulfil a set of passing criteria for the phase 4 project of Flatiron's Software Engineering Course.
 
 
+## User Experience
+
+Users can navigate the login via client side routes:
+
+They can create an account with with sign up page:
+
+That they can use to login:
+
+When the 'Remember Me' option is checked, their logged in status will persist:
+
+When it isn't, it won't:
+
+Users can start conversations with other users:
+
+In which they can send messages:
+
+Conversation titles and messages' content can be edited:
+
+And each can be deleted:
+
+However, a user can only delete their own messages (conversations will be fully deleted when all users have deleted the conversation):
+
+Conversations can also be filtered by their users' usernames:
+
+When validations fail, error messages will be displayed on the DOM:
+
+
+
 ## Project Requirements for the Messagely Messaging App
 
 
