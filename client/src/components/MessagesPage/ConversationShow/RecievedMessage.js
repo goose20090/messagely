@@ -1,11 +1,10 @@
 /** @format */
 
 import React from "react";
-import { useDatify } from "../../../utilities/useDatify";
 import DeletedMessage from "./DeletedMessage";
+import { datify } from "../../../utilities/datify";
 
 function ReceivedMessage({ message }) {
-
   return (
     <div className="col-start-1 col-end-8 rounded-lg p-3">
       {message.deleted ? (
@@ -23,7 +22,7 @@ function ReceivedMessage({ message }) {
         </div>
       )}
       <div className="flex w-full justify-start">
-        <span className={`text-xs italic`}>{useDatify(message.created_at)}</span>
+        <span className={`text-xs italic`}>{datify(message.created_at)}</span>
       </div>
     </div>
   );

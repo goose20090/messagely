@@ -6,32 +6,42 @@ import { faPenSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "../ConfirmationModal";
+import { datify } from "../../../utilities/datify";
 
-function ConversationOption({ handleChangeCurrentConvo, conversation, handleConversationDelete, updateTotalUnreadCount}) {
+function ConversationOption({
+  handleChangeCurrentConvo,
+  conversation,
+  handleConversationDelete,
+  updateTotalUnreadCount,
+}) {
   const { messages } = conversation;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [titleMaster, setTitleMaster] = useState(conversation.title);
   const [title, setTitle] = useState(conversation.title);
   const titleInputRef = useRef();
-  const [unreadCount, setUnreadCount]= useState(conversation.unread_messages_count)
+  const [unreadCount, setUnreadCount] = useState(
+    conversation.unread_messages_count
+  );
 
   const lastMessage = messages.slice(-1)[0];
 
   function handleConversationClick() {
     handleChangeCurrentConvo(conversation);
 
-    if (unreadCount> 0){
-    fetch(`/conversations/${conversation.id}/update_unread`, {
-      method: 'PATCH',
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then((res)=> res.json())
-    .then((res)=> {
-      setUnreadCount(0)
-      updateTotalUnreadCount(unreadCount)
-    })}
+    if (unreadCount > 0) {
+      fetch(`/conversations/${conversation.id}/update_unread`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setUnreadCount(0);
+          updateTotalUnreadCount(unreadCount);
+        });
+    }
   }
 
   function handleDeleteClick() {
@@ -69,14 +79,13 @@ function ConversationOption({ handleChangeCurrentConvo, conversation, handleConv
     }
   }, [isEditing]);
 
-  function handleModalDeleteClick(){
-    console.log('delete action triggered')
+  function handleModalDeleteClick() {
+    console.log("delete action triggered");
     fetch(`/conversations/${conversation.id}`, {
-      method: "DELETE"
-    })
-    .then((res)=> {
+      method: "DELETE",
+    }).then((res) => {
       handleConversationDelete(conversation);
-    })
+    });
   }
 
   function handleEditSubmit(e) {
@@ -105,107 +114,81 @@ function ConversationOption({ handleChangeCurrentConvo, conversation, handleConv
     setTitle(titleMaster);
   }
 
-  let formattedDate
+  let formattedDate;
 
-  function formatDate(date){
-
-    const createdDate = new Date(date);
-    const todayDate = new Date();
-    if (createdDate.toDateString() === todayDate.toDateString()) {
-      let minutes = createdDate.getMinutes();
-      if (minutes < 10) {
-        minutes = '0' + minutes;
-      }
-      return `${createdDate.getHours()}:${minutes}`;
-    } else {
-      let month = createdDate.getMonth() + 1;
-      if (month < 10) {
-        month = '0' + month;
-      }
-      let minutes = createdDate.getMinutes();
-      if (minutes < 10) {
-        minutes = '0' + minutes;
-      }
-      if (minutes % 10){
-        minutes = minutes + '0'
-      }
-       return `${createdDate.getDate()}/${month}/${createdDate.getFullYear()}`;
-    }
-}
-
-  if (lastMessage){
-    formattedDate = formatDate(lastMessage.created_at)
-  }
-  else{
-    formattedDate = formatDate(conversation.created_at)
+  if (lastMessage) {
+    formattedDate = datify(lastMessage.created_at);
+  } else {
+    formattedDate = datify(conversation.created_at);
   }
 
   return (
-<div className="relative flex flex-row items-center p-4">
-  {isModalOpen && (
-    <ConfirmationModal
-      open={isModalOpen}
-      setOpen={setIsModalOpen}
-      title={title}
-      setIsModalOpen={setIsModalOpen}
-      handleModalDeleteClick={handleModalDeleteClick}
-    />
-  )}
-  <div className="absolute right-0 top-0 mr-4 mt-3 text-xs text-gray-500">
-    <DropdownMenu items={dropdownItems} />
-  </div>
-  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-pink-500 font-bold text-pink-300">
-    {lastMessage
-      ? lastMessage.user.username[0].toUpperCase()
-      : conversation.users[0].username[0].toUpperCase()}
-  </div>
-  <div
-    className="ml-3 flex flex-grow cursor-pointer flex-col"
-    onClick={handleConversationClick}
-  >
-    <div className="text-sm font-medium">
-      {isEditing ? (
-        <form onSubmit={handleEditSubmit}>
-          <input
-            ref={titleInputRef}
-            value={title}
-            onBlur={handleBlur}
-            onChange={(e) => setTitle(e.target.value)}
-            className=" text-indigo-500"
-          />
-        </form>
-      ) : (
-        <span>{titleMaster}</span>
+    <div className="relative flex flex-row items-center p-4">
+      {isModalOpen && (
+        <ConfirmationModal
+          open={isModalOpen}
+          setOpen={setIsModalOpen}
+          title={title}
+          setIsModalOpen={setIsModalOpen}
+          handleModalDeleteClick={handleModalDeleteClick}
+        />
       )}
-    </div>
-    <div className="flex items-left">
-      <div className="w-40 truncate text-xs">
-        <span className="mr-2 font-bold">
-          {lastMessage ? `${lastMessage.user.username} :` : null}
-        </span>
-        
-        {lastMessage
-          ? lastMessage.deleted
-            ?<span className="italic"> Message Deleted</span>
-            : lastMessage.content
-          :<span className="italic float-left"> No messages yet </span>}
+      <div className="absolute right-0 top-0 mr-4 mt-3 text-xs text-gray-500">
+        <DropdownMenu items={dropdownItems} />
       </div>
-      <span className="text-xs italic ml-2"></span>
+      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-pink-500 font-bold text-pink-300">
+        {lastMessage
+          ? lastMessage.user.username[0].toUpperCase()
+          : conversation.users[0].username[0].toUpperCase()}
+      </div>
+      <div
+        className="ml-3 flex flex-grow cursor-pointer flex-col"
+        onClick={handleConversationClick}
+      >
+        <div className="text-sm font-medium">
+          {isEditing ? (
+            <form onSubmit={handleEditSubmit}>
+              <input
+                ref={titleInputRef}
+                value={title}
+                onBlur={handleBlur}
+                onChange={(e) => setTitle(e.target.value)}
+                className=" text-indigo-500"
+              />
+            </form>
+          ) : (
+            <span>{titleMaster}</span>
+          )}
+        </div>
+        <div className="items-left flex">
+          <div className="w-40 truncate text-xs">
+            <span className="mr-2 font-bold">
+              {lastMessage ? `${lastMessage.user.username} :` : null}
+            </span>
+
+            {lastMessage ? (
+              lastMessage.deleted ? (
+                <span className="italic"> Message Deleted</span>
+              ) : (
+                lastMessage.content
+              )
+            ) : (
+              <span className="float-left italic"> No messages yet </span>
+            )}
+          </div>
+          <span className="ml-2 text-xs italic"></span>
+        </div>
+      </div>
+      <div className="ml-2 mb-1 flex flex-shrink-0 flex-col items-end self-end">
+        {unreadCount > 0 ? (
+          <span className="mb-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+            {unreadCount}
+          </span>
+        ) : (
+          <span className="ml-2 h-5 text-xs italic">{formattedDate}</span>
+        )}
+      </div>
     </div>
-  </div>
-  <div className="ml-2 mb-1 flex-shrink-0 self-end flex flex-col items-end">
-    {unreadCount > 0 ? (
-      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white mb-1">
-        {unreadCount}
-      </span>
-    ) : (
-      <span className="h-5 text-xs italic ml-2">{formattedDate}</span>
-    )}
-  </div>
-</div>
-
-
-
   );
 }
 

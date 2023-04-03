@@ -7,7 +7,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import autosize from "autosize";
 import DeletedMessage from "./DeletedMessage";
-import { useDatify } from "../../../utilities/useDatify";
+import { datify } from "../../../utilities/datify";
 
 function UserMessage({ message, handleMessageMutation }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -62,8 +62,6 @@ function UserMessage({ message, handleMessageMutation }) {
     }
   }
   function handleEditSubmit() {
-    
-
     fetch(`/messages/${message.id}`, {
       method: "PATCH",
       headers: {
@@ -75,15 +73,13 @@ function UserMessage({ message, handleMessageMutation }) {
     }).then((r) => {
       if (r.ok) {
         r.json().then((editedMessage) => {
-          setErrors([])
+          setErrors([]);
           setMessageContentMaster(messageContent);
           setIsEditing(false);
           handleMessageMutation(editedMessage);
         });
       } else {
-        r.json().then((errorData) => 
-        setErrors(errorData.errors)
-        );
+        r.json().then((errorData) => setErrors(errorData.errors));
       }
     });
   }
@@ -146,7 +142,7 @@ function UserMessage({ message, handleMessageMutation }) {
         </div>
       )}
       <div className="flex w-full justify-end">
-        <span className="text-xs italic">{useDatify(message.created_at)}</span>
+        <span className="text-xs italic">{datify(message.created_at)}</span>
       </div>
     </div>
   );
