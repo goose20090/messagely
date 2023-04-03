@@ -3,7 +3,6 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_resp
 
     def index
         conversations = Conversation.all
-        byebug
         render json: conversations, include: ['messages', 'messages.user', 'users']
     end
 
@@ -14,7 +13,7 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_resp
           conversation.users << user
         end
         conversation.save!
-        render json: conversation, include: ['messages', 'messages.user', 'users'], serializer: ConversationSerializer, status: :created 
+        render json: conversation, current_user: current_user, include: ['messages', 'messages.user', 'users'], serializer: ConversationSerializer, status: :created 
     end
 
     def update
@@ -33,7 +32,7 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_resp
     def destroy
         conversation_user = current_user.conversation_users.find_by(conversation_id: params[:id])
       
-        current_user.messages.where(conversation_id: params[:id]).update_all(deleted: true, content: nil)
+        current_user.messages.where(conversation_id: params[:id]).update_all(deleted: true, read: true, content: nil)
 
         conversation_user.update(deleted: true)
 
@@ -49,10 +48,6 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_resp
 
     def find_conversation
         Conversation.find(params[:id])
-    end
-
-    def current_user
-        User.find(session[:user_id])
     end
 
     def conversation_params

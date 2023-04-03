@@ -18,6 +18,7 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_resp
         message.update!(message_params)
         if(params[:deleted])
             message[:content] = nil
+            message[:read] = true
         end
         render json: message
     end
