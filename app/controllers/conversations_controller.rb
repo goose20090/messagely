@@ -17,7 +17,7 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_resp
         render json: conversation, include: ['messages', 'messages.user', 'users'], 
           serializer: ConversationSerializer, status: :created, 
           meta: { total_unread_message_count: current_user.total_unread_message_count }
-      end
+    end
 
     def update
         conversation = find_conversation

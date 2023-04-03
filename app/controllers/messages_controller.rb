@@ -28,7 +28,7 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_resp
     end
 
     def message_params
-        params.permit(:content, :user_id, :conversation_id, :deleted).merge(read: false)
+        params.permit(:content, :user_id, :conversation_id, :deleted)
     end
 
     def render_unprocessable_entity_response(invalid)
