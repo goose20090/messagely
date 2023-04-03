@@ -6,7 +6,9 @@ import { UserContext } from "../../../context/user";
 function NewConversationForm({ allUsers, handleAddConv, setAddingConv }) {
   const { user } = useContext(UserContext);
   const [showOptions, setShowOptions] = useState(false);
-  const [options, setOptions] = useState(allUsers.filter((eachUser)=> eachUser.id !== user.id));
+  const [options, setOptions] = useState(
+    allUsers.filter((eachUser) => eachUser.id !== user.id)
+  );
   const [filterText, setFilterText] = useState("");
   const [errors, setErrors] = useState(false);
   const [newConvObj, setNewConvObj] = useState({
@@ -14,7 +16,6 @@ function NewConversationForm({ allUsers, handleAddConv, setAddingConv }) {
     users: [],
   });
   const optionInputRef = useRef();
- 
 
   function onSubmit(e) {
     e.preventDefault();
@@ -22,7 +23,8 @@ function NewConversationForm({ allUsers, handleAddConv, setAddingConv }) {
   }
 
   function postConv(newConvObj) {
-    const addedUserIds = newConvObj.users.map((user) => {""
+    const addedUserIds = newConvObj.users.map((user) => {
+      "";
       return { id: user.id };
     });
     const newConvUserIds = [...addedUserIds, { id: user.id }];
@@ -52,7 +54,6 @@ function NewConversationForm({ allUsers, handleAddConv, setAddingConv }) {
             return errorParts.join(" ");
           });
 
-          console.log(modifiedErrors);
           setErrors(modifiedErrors);
         });
       }
@@ -177,7 +178,13 @@ function NewConversationForm({ allUsers, handleAddConv, setAddingConv }) {
             </div>
           )}
         </div>
-        {errors ? errors.map((error, index)=> <p className="text-xs italic text-red-500 mt-1" key ={index}>{error}</p>): null}
+        {errors
+          ? errors.map((error, index) => (
+              <p className="mt-1 text-xs italic text-red-500" key={index}>
+                {error}
+              </p>
+            ))
+          : null}
 
         <button
           type="submit"
