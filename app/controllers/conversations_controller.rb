@@ -1,5 +1,6 @@
 class ConversationsController < ApplicationController
-rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
+    rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
+    before_action :authorize
 
     def index
         conversations = Conversation.all
@@ -47,7 +48,11 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_resp
     private
 
     def find_conversation
-        Conversation.find(params[:id])
+        current_user.conversations.find(params[:id])
+    end
+
+    def authorize
+        return render json: {errors: ["Not authorized"]}, status: :unauthorized unless session.include? :user_id
     end
 
     def conversation_params
