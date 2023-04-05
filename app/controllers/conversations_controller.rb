@@ -10,9 +10,9 @@ class ConversationsController < ApplicationController
     def create
         byebug
         conversation = Conversation.new(title: params[:title])
-        params[:new_conv_user_ids].each do |user_obj|
-          user = User.find(user_obj[:id])
-          conversation.users << user
+        params[:new_conv_user_ids].each do |id_hash|
+            initialiser_message = Message.create(user_id: id_hash[:id], conversation_id: conversation.id, initialiser: true, read: true, content: 'initialiser')
+            conversation.messages << initialiser_message
         end
         conversation.save!
         render json: conversation, current_user: current_user, include: ['messages', 'messages.user', 'users'], serializer: ConversationSerializer, status: :created 
@@ -57,7 +57,7 @@ class ConversationsController < ApplicationController
     end
 
     def conversation_params
-        params.permit(:title, :id)
+        params.permit(:title, :id, :new_conv_user_ids)
     end
     def render_unprocessable_entity_response invalid
         render json: {errors: invalid.record.errors.full_messages}, status: :unprocessable_entity

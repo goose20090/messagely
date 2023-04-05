@@ -23,6 +23,7 @@ function ConversationOption({
   const [unreadCount, setUnreadCount] = useState(
     conversation.unread_messages_count
   );
+  // console.log(conversation);
 
   const lastMessage = messages.slice(-1)[0];
 
@@ -163,17 +164,17 @@ function ConversationOption({
         <div className="items-left flex">
           <div className="w-40 truncate text-xs">
             <span className="mr-2 font-bold">
-              {lastMessage ? `${lastMessage.user.username} :` : null}
+              {lastMessage.initialiser
+                ? null
+                : `${lastMessage.user.username} :`}
             </span>
 
-            {lastMessage ? (
-              lastMessage.deleted ? (
-                <span className="italic"> Message Deleted</span>
-              ) : (
-                lastMessage.content
-              )
-            ) : (
+            {lastMessage.initialiser ? (
               <span className="float-left italic"> No messages yet </span>
+            ) : lastMessage.deleted ? (
+              <span className="italic"> Message Deleted</span>
+            ) : (
+              lastMessage.content
             )}
           </div>
           <span className="ml-2 text-xs italic"></span>

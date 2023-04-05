@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :username, :password, :password_confirmation, :total_unread_message_count
+  attributes :id, :username, :total_unread_message_count, :unique_conversations
 
 
   has_many :messages
@@ -8,5 +8,4 @@ class UserSerializer < ActiveModel::Serializer
   def total_unread_message_count
     self.object.total_unread_message_count
   end
-
 end

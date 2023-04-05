@@ -21,6 +21,7 @@ import NewConversationButton from "./MessagingSidebar/NewConversationButton";
 import Search from "./MessagingSidebar/SearchBar/Search";
 import Loader from "../Auth/Loader";
 import NewConversationForm from "./MessagingSidebar/NewConversationForm";
+import { filterArrayOfObjsToUniqs } from "../../utilities/filterArrayOfObjsToUniqs";
 
 function MessagesPage({ onLogout }) {
   const [loading, setLoading] = useState(true);
@@ -35,12 +36,9 @@ function MessagesPage({ onLogout }) {
   const [currentConv, setCurrentConv] = useState({});
 
   useEffect(() => {
-    let nonDeletedConvos;
-
     if (user) {
-      nonDeletedConvos = conversations.filter((convo) => !convo.deleted);
       const sortedNonDeletedConvos =
-        sortConversationsByUpdatedAt(nonDeletedConvos);
+        sortConversationsByUpdatedAt(conversations);
 
       setUserConvos(sortedNonDeletedConvos);
       setMasterConvs(sortedNonDeletedConvos);
@@ -50,7 +48,8 @@ function MessagesPage({ onLogout }) {
       fetch("/users")
         .then((res) => res.json())
         .then((usersData) => {
-          console.log(usersData);
+          // console.log(usersData);
+          // console.log(conversations);
           setAllUsers(usersData);
         });
     }
@@ -237,7 +236,9 @@ function MessagesPage({ onLogout }) {
             <MessagesContainer>
               {currentConv
                 ? currentConv.messages.map((message) => {
-                    if (message.user_id === user.id) {
+                    if (message.initialiser) {
+                      return null;
+                    } else if (message.user_id === user.id) {
                       return (
                         <UserMessage
                           message={message}

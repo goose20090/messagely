@@ -4,6 +4,7 @@ class MessagesController < ApplicationController
 
     def index
         messages = Message.all
+        # .filter{|message| message[:initialiser] === true}
         render json: messages
     end
 

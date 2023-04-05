@@ -3,7 +3,7 @@ class ConversationSerializer < ActiveModel::Serializer
 
 
   has_many :messages
-  has_many :users, through: :messages
+  has_many :users, through: :conversation_users
 
   def deleted
     self.object.deleted_by_user?(current_user)
