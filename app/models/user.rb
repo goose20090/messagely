@@ -12,10 +12,4 @@ class User < ApplicationRecord
         Message.where(conversation_id: self.conversation_ids, read: false).where.not(user_id: self.id).count
     end
 
-        # possible upgrade:  self.messages.where(conversation_id: self.conversation_ids, read: false).where.not(user_id: self.id).count
-
-    def unique_conversations
-        self.conversations.distinct
-    end
-      
 end

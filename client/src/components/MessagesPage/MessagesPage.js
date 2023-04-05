@@ -1,7 +1,6 @@
 /** @format */
 import React, { useState, useEffect } from "react";
 import { useContext } from "react";
-import useMessagesPage from "./hooks/useMessagesPage";
 import { Redirect } from "react-router-dom";
 import { UserContext } from "../../context/user";
 // ConversationShow components

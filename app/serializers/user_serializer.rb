@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :username, :total_unread_message_count, :unique_conversations
+  attributes :id, :username, :total_unread_message_count
 
 
   has_many :messages
