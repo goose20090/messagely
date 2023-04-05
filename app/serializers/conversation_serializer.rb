@@ -12,5 +12,9 @@ class ConversationSerializer < ActiveModel::Serializer
   def unread_messages_count
     self.object.messages.filter { |message| !message.read && message.user_id != current_user.id }.count
   end
+  
+  def messages
+    object.messages.order(created_at: :asc)
+  end
 
 end
