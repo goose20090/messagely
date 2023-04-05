@@ -8,13 +8,11 @@ class ConversationsController < ApplicationController
     end
 
     def create
-
-        if params[:new_conv_user_ids].length < 2
-            render json: { errors: ["At least one recipient required"] }, status: :unprocessable_entity
+        if params[:new_conv_user_ids].blank?
+            render json: { errors: ["There must be at least one recipient."] }, status: :unprocessable_entity
             return
-        end
-        conversation = Conversation.new(title: params[:title])
-      
+          end
+        conversation = Conversation.new(title: params[:title], new_conv_user_ids: params[:new_conv_user_ids])
         params[:new_conv_user_ids].each do |user_id|
           initialiser_message = Message.create(user_id: user_id[:id], conversation_id: conversation.id, initialiser: true, read: true, content: 'initialiser')
           conversation.messages << initialiser_message
@@ -45,7 +43,6 @@ class ConversationsController < ApplicationController
         else
             conversation.messages.where({user_id: current_user.id}).update_all({deleted: true, content: nil, read: true})
         end
-
         conversation.save
         head :no_content
     end
