@@ -26,10 +26,11 @@ end
       content: Faker::Lorem.sentence(word_count: 5),
       read: false,
       deleted: false,
+      initialiser: false,
     )
     message.user = users.sample
     message.conversation = conversation
     message.save!
-    
   end
+  conversation.save!
 end

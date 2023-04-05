@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
-    before_action :authorize
+    before_action :authorize, except: [:create]
     before_action :handle_remember_me, only: [:show]
   
     def index

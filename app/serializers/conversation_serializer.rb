@@ -1,9 +1,9 @@
 class ConversationSerializer < ActiveModel::Serializer
   attributes :id,:title, :updated_at, :created_at, :deleted, :unread_messages_count
 
-  has_many :conversation_users
+
   has_many :messages
-  has_many :users, through: :conversation_users
+  has_many :users, through: :messages
 
   def deleted
     self.object.deleted_by_user?(current_user)

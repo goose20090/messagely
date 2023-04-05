@@ -8,6 +8,7 @@ class ConversationsController < ApplicationController
     end
 
     def create
+        byebug
         conversation = Conversation.new(title: params[:title])
         params[:new_conv_user_ids].each do |user_obj|
           user = User.find(user_obj[:id])
