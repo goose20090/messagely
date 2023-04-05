@@ -8,7 +8,7 @@ class ConversationsController < ApplicationController
     end
 
     def create
-        if params[:new_conv_user_ids].blank?
+        if params[:new_conv_user_ids].length < 2
             render json: { errors: ["There must be at least one recipient."] }, status: :unprocessable_entity
             return
           end
@@ -42,8 +42,8 @@ class ConversationsController < ApplicationController
             conversation.destroy
         else
             conversation.messages.where({user_id: current_user.id}).update_all({deleted: true, content: nil, read: true})
+            conversation.save
         end
-        conversation.save
         head :no_content
     end
 

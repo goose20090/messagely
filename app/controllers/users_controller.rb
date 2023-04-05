@@ -23,6 +23,8 @@ class UsersController < ApplicationController
     end
   
     private
+
+    # auth and security
   
     def user_params
       params.permit(:username, :password, :password_confirmation, :remember_me)
@@ -38,6 +40,8 @@ class UsersController < ApplicationController
         return render json: {errors: ["Not authorized"]}, status: :unauthorized
       end
     end
+
+    # error handling
   
     def render_not_found_response
       render json: {errors: "User not in session"}, status: :not_found

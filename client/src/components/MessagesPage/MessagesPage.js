@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { UserContext } from "../../context/user";
+import { sortByUpdatedAt } from "../../utilities/sortByUpdated";
 // ConversationShow components
 import ConversationShow from "./ConversationShow/ConversationShow";
 import ConversationHeader from "./ConversationShow/ConversationHeader";
@@ -35,11 +36,9 @@ function MessagesPage({ onLogout }) {
 
   useEffect(() => {
     if (user) {
-      const sortedNonDeletedConvos =
-        sortConversationsByUpdatedAt(conversations);
-
-      setUserConvos(sortedNonDeletedConvos);
-      setMasterConvs(sortedNonDeletedConvos);
+      const sortedConvos = sortByUpdatedAt(conversations);
+      setUserConvos(sortedConvos);
+      setMasterConvs(sortedConvos);
       setUnreadCount(user.total_unread_message_count);
       setCurrentConv(false);
       setLoading(false);
@@ -50,15 +49,6 @@ function MessagesPage({ onLogout }) {
         });
     }
   }, []);
-
-  function sortConversationsByUpdatedAt(conversations) {
-    return conversations.sort((a, b) => {
-      const dateA = new Date(a.updated_at);
-      const dateB = new Date(b.updated_at);
-
-      return dateB - dateA;
-    });
-  }
 
   function handleChangeCurrentConvo(conv) {
     setCurrentConv(conv);
@@ -117,7 +107,7 @@ function MessagesPage({ onLogout }) {
       } else return conversation;
     });
 
-    const convosSortedByDate = sortConversationsByUpdatedAt(newConversations);
+    const convosSortedByDate = sortByUpdatedAt(newConversations);
 
     setUser({
       ...user,
@@ -158,7 +148,7 @@ function MessagesPage({ onLogout }) {
   }
 
   function filterConversationsByUsername(conversations, searchValue) {
-    if (!searchValue) return sortConversationsByUpdatedAt(masterConvs);
+    if (!searchValue) return sortByUpdatedAt(masterConvs);
 
     return conversations.filter((conversation) => {
       const users = conversation.users;
@@ -167,6 +157,7 @@ function MessagesPage({ onLogout }) {
       );
     });
   }
+
   if (!user) return <Redirect to="/" />;
   return (
     <div>
