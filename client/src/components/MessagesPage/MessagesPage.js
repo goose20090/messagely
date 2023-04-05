@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { UserContext } from "../../context/user";
-import { sortByUpdatedAt } from "../../utilities/sortByUpdated";
+import { sortByLastMessage } from "../../utilities/sortByLastMessage";
 // ConversationShow components
 import ConversationShow from "./ConversationShow/ConversationShow";
 import ConversationHeader from "./ConversationShow/ConversationHeader";
@@ -36,7 +36,7 @@ function MessagesPage({ onLogout }) {
 
   useEffect(() => {
     if (user) {
-      const sortedConvos = sortByUpdatedAt(conversations);
+      const sortedConvos = sortByLastMessage(conversations);
       setUserConvos(sortedConvos);
       setMasterConvs(sortedConvos);
       setUnreadCount(user.total_unread_message_count);
@@ -107,7 +107,7 @@ function MessagesPage({ onLogout }) {
       } else return conversation;
     });
 
-    const convosSortedByDate = sortByUpdatedAt(newConversations);
+    const convosSortedByDate = sortByLastMessage(newConversations);
 
     setUser({
       ...user,
@@ -148,7 +148,7 @@ function MessagesPage({ onLogout }) {
   }
 
   function filterConversationsByUsername(conversations, searchValue) {
-    if (!searchValue) return sortByUpdatedAt(masterConvs);
+    if (!searchValue) return sortByLastMessage(masterConvs);
 
     return conversations.filter((conversation) => {
       const users = conversation.users;
