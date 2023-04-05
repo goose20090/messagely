@@ -8,7 +8,6 @@ class ConversationsController < ApplicationController
     end
 
     def create
-        byebug
         conversation = Conversation.new(title: params[:title])
         params[:new_conv_user_ids].each do |id_hash|
             initialiser_message = Message.create(user_id: id_hash[:id], conversation_id: conversation.id, initialiser: true, read: true, content: 'initialiser')
@@ -32,17 +31,16 @@ class ConversationsController < ApplicationController
     end
 
     def destroy
-        conversation_user = current_user.conversation_users.find_by(conversation_id: params[:id])
-      
-        current_user.messages.where(conversation_id: params[:id]).update_all(deleted: true, read: true, content: nil)
 
-        conversation_user.update(deleted: true)
-
-        if conversation_user.conversation.conversation_users.all?(&:deleted)
-            conversation_user.conversation.conversation_users.destroy_all
-            conversation_user.conversation.destroy
+        conversation = find_conversation
+        conversation.deleted_by << current_user.id unless conversation.deleted_by.include?(current_user.id)
+        if conversation.deleted_by.length === conversation.users.length
+            conversation.destroy
+        else
+            conversation.messages.where({user_id: current_user.id}).update_all({deleted: true, content: nil, read: true})
         end
-      
+
+        conversation.save
         head :no_content
     end
 
@@ -57,7 +55,7 @@ class ConversationsController < ApplicationController
     end
 
     def conversation_params
-        params.permit(:title, :id, :new_conv_user_ids)
+        params.permit(:title, :id, :new_conv_user_ids,)
     end
     def render_unprocessable_entity_response invalid
         render json: {errors: invalid.record.errors.full_messages}, status: :unprocessable_entity

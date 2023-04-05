@@ -21,7 +21,6 @@ import NewConversationButton from "./MessagingSidebar/NewConversationButton";
 import Search from "./MessagingSidebar/SearchBar/Search";
 import Loader from "../Auth/Loader";
 import NewConversationForm from "./MessagingSidebar/NewConversationForm";
-import { filterArrayOfObjsToUniqs } from "../../utilities/filterArrayOfObjsToUniqs";
 
 function MessagesPage({ onLogout }) {
   const [loading, setLoading] = useState(true);
@@ -48,8 +47,6 @@ function MessagesPage({ onLogout }) {
       fetch("/users")
         .then((res) => res.json())
         .then((usersData) => {
-          // console.log(usersData);
-          // console.log(conversations);
           setAllUsers(usersData);
         });
     }
