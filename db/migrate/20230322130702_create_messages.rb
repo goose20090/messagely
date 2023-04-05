@@ -3,8 +3,9 @@ class CreateMessages < ActiveRecord::Migration[6.1]
     create_table :messages do |t|
       t.string :content
       t.boolean :read
-      t.references :user, null: false, foreign_key: true
-      t.references :conversation, null: false, foreign_key: true
+      t.boolean :deleted
+      t.integer :user_id
+      t.integer :conversation_id
 
       t.timestamps
     end
