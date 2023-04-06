@@ -45,6 +45,7 @@ function MessagesPage({ onLogout }) {
       fetch("/users")
         .then((res) => res.json())
         .then((usersData) => {
+          console.log(usersData);
           setAllUsers(usersData);
         });
     }
