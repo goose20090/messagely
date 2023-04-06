@@ -45,6 +45,7 @@ function MessagesPage({ onLogout }) {
       fetch("/users")
         .then((res) => res.json())
         .then((usersData) => {
+          console.log(usersData);
           setAllUsers(usersData);
         });
     }
@@ -220,9 +221,7 @@ function MessagesPage({ onLogout }) {
             <MessagesContainer>
               {currentConv
                 ? currentConv.messages.map((message) => {
-                    if (message.initialiser) {
-                      return null;
-                    } else if (message.user_id === user.id) {
+                    if (message.user_id === user.id) {
                       return (
                         <UserMessage
                           message={message}

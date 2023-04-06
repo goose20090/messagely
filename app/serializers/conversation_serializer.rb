@@ -14,7 +14,8 @@ class ConversationSerializer < ActiveModel::Serializer
   end
   
   def messages
-    object.messages.order(created_at: :asc)
+  object.messages.where(initialiser: false).order(created_at: :asc)
+    # object.messages.order(created_at: :asc)
   end
 
 end

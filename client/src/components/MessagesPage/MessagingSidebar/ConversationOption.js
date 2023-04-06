@@ -164,12 +164,10 @@ function ConversationOption({
         <div className="items-left flex">
           <div className="w-40 truncate text-xs">
             <span className="mr-2 font-bold">
-              {lastMessage.initialiser
-                ? null
-                : `${lastMessage.user.username} :`}
+              {lastMessage ? `${lastMessage.user.username} :` : null}
             </span>
 
-            {lastMessage.initialiser ? (
+            {!lastMessage ? (
               <span className="float-left italic"> No messages yet </span>
             ) : lastMessage.deleted ? (
               <span className="italic"> Message Deleted</span>
