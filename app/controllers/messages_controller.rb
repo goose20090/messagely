@@ -11,6 +11,7 @@ class MessagesController < ApplicationController
         message = Message.new(message_params)
         message.user_id = current_user.id
         message.read = false
+        message.initialiser = false
         message.save!
         render json: message, message: :created
     end

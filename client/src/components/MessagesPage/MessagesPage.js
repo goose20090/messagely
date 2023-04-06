@@ -176,18 +176,15 @@ function MessagesPage({ onLogout }) {
               <ConversationList>
                 {userConvos
                   ? userConvos.map((conversation) => {
-                      if (conversation.deleted) {
-                        return null;
-                      } else
-                        return (
-                          <ConversationOption
-                            key={conversation.id}
-                            conversation={conversation}
-                            handleChangeCurrentConvo={handleChangeCurrentConvo}
-                            handleConversationDelete={handleConversationDelete}
-                            updateTotalUnreadCount={updateTotalUnreadCount}
-                          />
-                        );
+                      return (
+                        <ConversationOption
+                          key={conversation.id}
+                          conversation={conversation}
+                          handleChangeCurrentConvo={handleChangeCurrentConvo}
+                          handleConversationDelete={handleConversationDelete}
+                          updateTotalUnreadCount={updateTotalUnreadCount}
+                        />
+                      );
                     })
                   : null}
                 {addingConv ? (
