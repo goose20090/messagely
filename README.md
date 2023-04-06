@@ -68,7 +68,7 @@ When validations fail, error messages will be displayed on the DOM:
 
    - This app has 3 resources: Users, Messages and Conversations
 
-   - Users and Conversations have a many-to-many relationship and are linked by the conversation_user join table
+   - Users and Conversations have a many-to-many relationship through the Messages resource
 
    - Full CRUD actions are available on both messages and conversations
 
