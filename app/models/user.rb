@@ -11,5 +11,4 @@ class User < ApplicationRecord
     def total_unread_message_count
         Message.where(conversation_id: self.conversation_ids, read: false).where.not(user_id: self.id).count
     end
-
 end

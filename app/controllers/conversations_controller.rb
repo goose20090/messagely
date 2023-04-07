@@ -18,7 +18,7 @@ class ConversationsController < ApplicationController
           conversation.messages << initialiser_message
         end
         conversation.save!
-        render json: conversation, current_user: current_user, include: ['messages', 'messages.user', 'users'], serializer: ConversationSerializer, status: :created
+        render json: conversation, current_user: current_user, include: ['messages', 'messages.user', 'users'],  status: :created
       end
 
     def update
