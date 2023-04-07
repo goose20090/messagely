@@ -1,6 +1,5 @@
 class MessagesController < ApplicationController
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
-    before_action :authorize
 
     def index
         messages = Message.all
@@ -33,11 +32,7 @@ class MessagesController < ApplicationController
     def find_message
         current_user.messages.find(params[:id])
     end
-
-    def authorize
-        return render json: {errors: ["Not authorized"]}, status: :unauthorized unless session.include? :user_id
-    end
-
+    
     def message_params
         params.permit(:content, :deleted, :conversation_id)
     end
