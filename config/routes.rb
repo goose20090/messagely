@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :conversations
   resources :messages, only: [:index, :create, :update]
   resources :users, only: [:index]
+
+
   
 
   post "/login", to: "sessions#create"

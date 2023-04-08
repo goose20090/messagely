@@ -22,7 +22,7 @@ class UsersController < ApplicationController
       set_session(user, params[:remember_me])
       render json: user, status: :created
     end
-  
+
     private
 
     # auth and security
