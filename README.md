@@ -4,7 +4,7 @@
 
 This is a React-based Single Page Application, with a Ruby-on-Rails backend. It allows users to create their own accounts, log in, receive messages from other users as well as being able to send, edit and delete their own.
 
-It was designed partly to fulfil a set of passing criteria for the phase 4 project of Flatiron's Software Engineering Course.
+Currently deployed at: https://messaging-like.onrender.com/
 
 ## User Experience
 
