@@ -207,7 +207,9 @@ function MessagesPage({ onLogout }) {
                 ) : (
                   <>
                     <div />
-                    <h1 className="font-bold">Welcome to Messagely</h1>
+                    <h1 className="font-bold">
+                      Welcome to our Messaging-like!
+                    </h1>
                   </>
                 )}
                 <button
