@@ -4,8 +4,6 @@
 
 This is a React-based Single Page Application, with a Ruby-on-Rails backend. It allows users to create their own accounts, log in, receive messages from other users as well as being able to send, edit and delete their own.
 
-Currently deployed at: https://messaging-like.onrender.com/
-
 ## User Experience
 
 Users can navigate the login via client side routes:
