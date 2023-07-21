@@ -50,4 +50,4 @@ rails db:create db:migrate
    
 ## Acknowledgements
 
-[Messages UI Layout](https://tailwindcomponents.com/component/messages-ui-layout)) by iaminos.
+[Messages UI Layout](https://tailwindcomponents.com/component/messages-ui-layout) by iaminos.
