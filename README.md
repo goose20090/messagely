@@ -50,7 +50,4 @@ rails db:create db:migrate
    
 ## Acknowledgements
 
-Messages UI Layout by iaminos.
-Tailwind template components for UI styling.
-W3's Search/Filter Dropdown.
-Tailus' expandable search bar.
+[Messages UI Layout](https://tailwindcomponents.com/component/messages-ui-layout)) by iaminos.
