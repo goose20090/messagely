@@ -2,7 +2,7 @@
 
 Messaging-like is a React and Rails-based application, streamlined for user messaging. The application serves as a platform for users to manage conversations, send, edit, and delete messages.
 
-For each message sent, on-spot error notifications are provided during validation failures. Conversations are dynamic, permitting edit and delete actions on a user's own messages. However, users cannot delete others' messages, and the system responsibly notifies the other user of any changes.
+For each message sent, on-spot error notifications are provided during validation failures. Conversations are dynamic, permitting edit and delete actions on a user's own messages. However, users cannot delete others' messages, and the system responsibly notifies the recipient of any changes.
 
 ## Features
 
